@@ -1,0 +1,6 @@
+org.apel.gaia.container.boot
+org.apel.gaia.container.boot.controller
+org.apel.gaia.container.boot.customize
+org.apel.gaia.container.boot.customize.annotation
+org.apel.gaia.container.boot.freemarker
+org.apel.gaia.container.boot.i18n

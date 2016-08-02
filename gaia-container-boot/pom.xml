@@ -1,0 +1,70 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.apel</groupId>
+		<artifactId>gaia</artifactId>
+		<version>1.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>gaia-container-boot</artifactId>
+
+	<description> 
+		平台web启动器，利用spring boot的嵌入式容器来作为所有web业务系统的启动方式
+	</description>
+
+	<dependencies> 
+		<!-- jetty-boot -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-tomcat</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jetty</artifactId>
+		</dependency>
+
+		<!-- 打包为独立运行在tomcatwar时候需要开启下面依赖，并且去除上面的jetty boot依赖 tomcat独立运行环境中，如果项目的classpath中含有spring-jdbc,spring-orm等持久层 
+			组件并且没有指明datasource的配置，那么会抛异常，所以如果没有用到datasource就不要 导入spring-jdbc，spring-orm等包，避免遇到未知错误，目前判定是根绝spring 
+			boot在独立的 tomcat中启动会自动检测，如果遇到spring-jdbc等包在classpath中，则会去校验datasource -->
+		<!-- tomcat war boot -->
+		<!-- <dependency> -->
+		<!-- <groupId>org.springframework.boot</groupId> -->
+		<!-- <artifactId>spring-boot-starter-web</artifactId> -->
+		<!-- </dependency> -->
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.freemarker</groupId>
+			<artifactId>freemarker</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apel</groupId>
+			<artifactId>gaia-commons</artifactId>
+			<version>1.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apel</groupId>
+			<artifactId>gaia-util</artifactId>
+			<version>1.0.1-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
+
+</project>

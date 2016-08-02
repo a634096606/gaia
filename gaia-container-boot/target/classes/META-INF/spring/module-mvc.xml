@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="
+		   http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+           http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
+	
+	<!-- spring mvc -->
+    <mvc:annotation-driven />
+	<mvc:resources mapping="/**" location="classpath:/platform/,classpath:/static/,/"/>
+	
+	<mvc:interceptors>  
+        <!-- 多个拦截器,顺序执行 -->  
+        <mvc:interceptor>
+           <mvc:mapping path="/**"/>
+           <bean class="org.apel.gaia.container.boot.customize.AvoidDuplicateSubmitHandler"></bean>
+        </mvc:interceptor>  
+    </mvc:interceptors>
+	
+	<!-- freemarker -->
+	<bean id="freeMarkerViewResolver"  
+        class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">  
+        <property name="viewClass"  
+            value="org.springframework.web.servlet.view.freemarker.FreeMarkerView" /> 
+        <property name="prefix" value="" />
+        <property name="suffix" value=".html" />
+        <property name="cache" value="false"/>
+        <property name="order" value="1"/>
+        <property name="contentType" value="text/html;charset=UTF-8" />
+        <property name="exposeSessionAttributes" value="true" />  
+        <property name="exposeRequestAttributes" value="true" />  
+        <property name="requestContextAttribute" value="request"/>
+    </bean>
+	
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">  
+		<property name="defaultEncoding" value="utf-8" />  
+		<property name="maxUploadSize" value="10485760000" />  
+		<property name="maxInMemorySize" value="40960" />  
+	</bean> 
+	
+</beans>

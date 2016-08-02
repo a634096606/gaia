@@ -1,0 +1,27 @@
+package main;
+
+
+
+
+public class MainClass {
+	
+	//spring boot启动
+//	public static void main(String[] args) throws Exception{
+//		PlatformStarter.start();
+//	}
+	
+//	//dubbo 服务启动
+//	public static void main(String[] args) throws Exception {
+//		CountDownLatch cdl = new CountDownLatch(1);
+//		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("classpath*:META-INF/spring/module-*.xml");
+//		context.start();
+//		System.out.println("************服务启动完成");
+//		cdl.await();
+//		context.close();
+//	}
+	
+	
+	
+	
+	
+}
