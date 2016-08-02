@@ -10,7 +10,7 @@ import java.io.FileOutputStream;
  * @author lijian
  *
  */
-public class AttachementUtil {
+public class AttachementUtil { 
 	
 	private static File rootDir = new File(System.getProperty("user.dir"), "attachement");
 	
