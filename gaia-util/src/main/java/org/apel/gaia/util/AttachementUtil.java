@@ -16,7 +16,7 @@ public class AttachementUtil {
 	
 	public static void storeAttachment(byte[] bytes, String path) {
 		if(!rootDir.exists()){
-			rootDir.mkdir();
+			rootDir.mkdir(); 
 		}
 		File file = new File(rootDir + "/" + path);
 		file.getParentFile().mkdirs();
