@@ -8,7 +8,42 @@
 	</parent>
 	<artifactId>gaia-persist</artifactId>
 
+	<properties>
+		<hibernate.version>5.1.0.Final</hibernate.version>
+		<jpa.data.version>1.10.2.RELEASE</jpa.data.version>
+	</properties>
+
+
 	<dependencies>
+		<!-- hibernate and jpa -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>${hibernate.version}</version><!--$NO-MVN-MAN-VER$ -->
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>${hibernate.version}</version><!--$NO-MVN-MAN-VER$ -->
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-ehcache</artifactId>
+			<version>${hibernate.version}</version><!--$NO-MVN-MAN-VER$ -->
+		</dependency>
+		<!-- jpa data -->
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-jpa</artifactId>
+			<version>${jpa.data.version}</version><!--$NO-MVN-MAN-VER$ -->
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-commons</artifactId>
+			<version>1.12.2.RELEASE</version><!--$NO-MVN-MAN-VER$-->
+		</dependency>
+
+
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
