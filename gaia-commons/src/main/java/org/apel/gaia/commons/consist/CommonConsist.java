@@ -7,7 +7,9 @@ package org.apel.gaia.commons.consist;
  */
 public interface CommonConsist {
 	
+	final static String CURRENT_USER_ID = "currentUserId";
 	static final String CURRENT_USER = "currentUser";
 	static final String CURRENT_USER_NAME = "currentUserName";
+	static final String CURRENT_USER_LOGO = "currentUserLogo";
 	static final String APP_CONTEXT_PATH = "appContextPath";
 }
