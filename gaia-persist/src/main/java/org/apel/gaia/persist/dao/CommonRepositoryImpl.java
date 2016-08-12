@@ -30,6 +30,7 @@ import org.apel.gaia.util.UUIDUtil;
 import org.hibernate.annotations.QueryHints;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.util.StringUtils;
 
@@ -43,6 +44,13 @@ public class CommonRepositoryImpl<T, ID extends Serializable>
 	Logger logger = LoggerFactory.getLogger(CommonRepositoryImpl.class);
 	
 	private final EntityManager entityManager;
+	
+	public CommonRepositoryImpl(JpaEntityInformation<T, ID> entityInformation,
+            EntityManager entityManager) {
+		super(entityInformation, entityManager);
+		// Keep the EntityManager around to used from the newly introduced methods.
+		this.entityManager = entityManager;
+	}
 	
 	public CommonRepositoryImpl(Class<T> domainClass, EntityManager em) {
 		super(domainClass, em);
