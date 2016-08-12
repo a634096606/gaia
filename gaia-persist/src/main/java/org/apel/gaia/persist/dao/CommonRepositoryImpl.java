@@ -52,11 +52,6 @@ public class CommonRepositoryImpl<T, ID extends Serializable>
 		this.entityManager = entityManager;
 	}
 	
-	public CommonRepositoryImpl(Class<T> domainClass, EntityManager em) {
-		super(domainClass, em);
-		this.entityManager = em;
-	}
-
 	@Override
 	public void store(Object... item) {
 		if (null != item) {
