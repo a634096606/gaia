@@ -11,6 +11,7 @@ import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.mapper.MapperScannerConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
 import com.github.pagehelper.PageHelper;
@@ -20,6 +21,7 @@ import com.github.pagehelper.PageHelper;
  * @author lijian
  *
  */
+@Profile("mybatis")
 @Configuration
 public class MybatisConfig {
 	
