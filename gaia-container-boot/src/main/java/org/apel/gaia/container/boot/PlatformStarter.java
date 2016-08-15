@@ -14,8 +14,8 @@ import org.springframework.context.annotation.ImportResource;
 @ImportResource("classpath*:META-INF/spring/module-*.xml")
 public class PlatformStarter {
 	
-	public static void start(){
-		 SpringApplication.run(PlatformStarter.class);
+	public static void start(String... args){
+		 SpringApplication.run(PlatformStarter.class, args);
 	}
 	
 }

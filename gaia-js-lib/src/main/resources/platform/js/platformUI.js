@@ -68,11 +68,8 @@ function UIContext(){
 			dataType: "json",
 			type: "get",
 			success: function(data, textStatus,jqXHR){
-				if(data.hasOwnProperty("message")){
-					data = data.message
-				}
-				if(data.status){
-					if(data.status == 1 || data.status == 200){
+				if(data.statusCode != null){
+					if(data.statusCode == 0){
 						toastr.success(data.statusText);
 					}else{
 						toastr.error(data.statusText);
@@ -195,7 +192,7 @@ function UIContext(){
 			url: contextPath + "/code/children/" + parentId,
 		    method:"get",
 		    loadFilter: function(data){
-		    	return formatEasyUITreeData(data);//格式化数据
+		    	return me.formatEasyUITreeData(data);//格式化数据
 		    }
 		};
 		var allOptions = $.extend(true, defaultOptions, options);
@@ -259,7 +256,7 @@ function UIContext(){
 			url: contextPath + "/org/children/" + parentId,
 		    method:"get",
 		    loadFilter: function(data){
-		    	return formatEasyUITreeData(data);//格式化数据
+		    	return me.formatEasyUITreeData(data);//格式化数据
 		    }
 		};
 		var combotree =  $("#" + inputId).combotree($.extend(true, defaultOptions, options));
@@ -274,7 +271,7 @@ function UIContext(){
 		    method:"get",
 		    queryParams:{typeCode: parentTypeCode},
 		    loadFilter: function(data){
-		    	return formatEasyUITreeData(data);//格式化数据
+		    	return me.formatEasyUITreeData(data);//格式化数据
 		    }
 		};
 		var combotree =  $("#" + inputId).combotree($.extend(true, defaultOptions, options));
@@ -289,7 +286,7 @@ function UIContext(){
 		    method:"get",
 		    queryParams:{typeCode: typeCode},
 		    loadFilter: function(data){
-		    	return formatEasyUITreeData(data);//格式化数据
+		    	return me.formatEasyUITreeData(data);//格式化数据
 		    }
 		};
 		var combotree =  $("#" + inputId).combotree($.extend(true, defaultOptions, options));
