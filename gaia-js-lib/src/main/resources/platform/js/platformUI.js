@@ -348,13 +348,13 @@ function UIContext(){
 		}else{
 			url = options.url + "&" + requestParam;
 		}
-		var scriptTemplate = "<script id=\"" + randomStr + "\" type=\"text/javascript\" src=\"" + url + "\"></script>";
 		//注册全局函数
 		window[callBackMethodName] = function (data) {
 	    	if(options.complete){
 	    		options.complete(data);
 	    	}
 	    };
+		var scriptTemplate = "<script id=\"" + randomStr + "\" type=\"text/javascript\" src=\"" + url + "\"></script>";
 		//删除使用过的script标签
 		$("head").append(scriptTemplate);
 		$("#" + randomStr).remove();
