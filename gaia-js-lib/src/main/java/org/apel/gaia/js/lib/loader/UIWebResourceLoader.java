@@ -12,7 +12,8 @@ public class UIWebResourceLoader implements ServletContextAware{
 	
 	//构造系统app.js资源
 	private String buildAppjsResource(String contextPath){
-		String jsTempalte = "<script type=\"text/javascript\" src=\"" + contextPath + "/js/platformUI.js\"></script>"
+		String jsTempalte = "<script type=\"text/javascript\" src=\"" + contextPath + "/js/app.js\"></script>"
+				+ "<script type=\"text/javascript\" src=\"" + contextPath + "/js/platformUI.js\"></script>"
 				+ "<script type=\"text/javascript\" src=\"" + contextPath + "/js/date.js\"></script>";
 		return jsTempalte;
 	}
@@ -46,7 +47,8 @@ public class UIWebResourceLoader implements ServletContextAware{
 		String local_js = "<script src=\"" + contextPath + "/js-module/jqGrid/js/i18n/grid.locale-cn.js\" type=\"text/javascript\"></script>";
 		String js = "<script src=\"" + contextPath + "/js-module/jqGrid/js/jquery.jqGrid.js\" type=\"text/javascript\"></script>";
 		String setting_js = "<script src=\"" + contextPath + "/js-module/jqGrid/js/jqGrid.setting.js\" type=\"text/javascript\"></script>";
-		return multiSelectPluginCss + multiSelectPluginJs + theme_css + css + local_js + js + setting_js;
+		String dateSearchabaleDeal_js = "<script src=\"" + contextPath + "/js-module/jqGrid/plugins/dateSearchabaleDeal.js\" type=\"text/javascript\"></script>";
+		return multiSelectPluginCss + multiSelectPluginJs + theme_css + css + local_js + js + setting_js+dateSearchabaleDeal_js;
 	}
 	
 	//构造easyUI资源
