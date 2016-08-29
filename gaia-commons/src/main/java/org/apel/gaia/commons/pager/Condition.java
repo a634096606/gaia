@@ -23,6 +23,16 @@ public class Condition implements Serializable {
 	 * 是否有后括号
 	 */
 	protected boolean isSuffixBrackets = false;
+	
+	/**
+	 * 后括号字符串
+	 */
+	protected String suffixBracketsValue = "";
+	
+	/**
+	 * 前括号字符串
+	 */
+	protected String preffixBracketsValue = "";
 
 	/** 属性名 */
 	protected String propertyName;
@@ -32,6 +42,8 @@ public class Condition implements Serializable {
 	protected Operation operation;
 	/** 属性类型 */
 	protected String propertyType;
+	
+	
 	
 	/**组前缀括号*/
 	protected String groupPrefixBrackets ="";
@@ -137,7 +149,23 @@ public class Condition implements Serializable {
 	public String getGroupPrefixBrackets() {
 		return groupPrefixBrackets;
 	}
-	
+
+	public String getSuffixBracketsValue() {
+		return suffixBracketsValue;
+	}
+
+	public void setSuffixBracketsValue(String suffixBracketsValue) {
+		this.suffixBracketsValue = suffixBracketsValue;
+	}
+
+	public String getPreffixBracketsValue() {
+		return preffixBracketsValue;
+	}
+
+	public void setPreffixBracketsValue(String preffixBracketsValue) {
+		this.preffixBracketsValue = preffixBracketsValue;
+	}
+
 	
 
 }

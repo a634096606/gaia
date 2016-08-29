@@ -30,7 +30,6 @@ import org.apel.gaia.util.UUIDUtil;
 import org.hibernate.annotations.QueryHints;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.util.StringUtils;
 
@@ -41,17 +40,15 @@ import org.springframework.util.StringUtils;
 public class CommonRepositoryImpl<T, ID extends Serializable> 
 	extends SimpleJpaRepository<T, Serializable> implements CommonRepository<T, Serializable>{
 	
-	Logger logger = LoggerFactory.getLogger(CommonRepositoryImpl.class);
+	private static final Logger LOG = LoggerFactory.getLogger(CommonRepositoryImpl.class);
 	
 	private final EntityManager entityManager;
 	
-	public CommonRepositoryImpl(JpaEntityInformation<T, ID> entityInformation,
-            EntityManager entityManager) {
-		super(entityInformation, entityManager);
-		// Keep the EntityManager around to used from the newly introduced methods.
-		this.entityManager = entityManager;
+	public CommonRepositoryImpl(Class<T> domainClass, EntityManager em) {
+		super(domainClass, em);
+		this.entityManager = em;
 	}
-	
+
 	@Override
 	public void store(Object... item) {
 		if (null != item) {
@@ -146,7 +143,7 @@ public class CommonRepositoryImpl<T, ID extends Serializable>
 		String order_jpql = preOrderJPQL(pageBean.getOrders());// 获取排序ql语句
 		String list_ql = preQL(qlString, condition_jpql, order_jpql);// 获取完整的list ql语句
 		String count_ql = preCountJPQL(qlString, condition_jpql);// 获取完整的count ql语句
-		logger.info("count_ql = {" + count_ql + "}");
+		LOG.info("count_ql = {" + count_ql + "}");
 		// 合并数据
 		for (int i = conValues.size() - 1; i >= 0; i--) {
 			values.add(conBeginIndex, conValues.get(i));
@@ -281,7 +278,7 @@ public class CommonRepositoryImpl<T, ID extends Serializable>
 		try {
 			query.setParameter(position, value);
 		} catch (IllegalArgumentException e) {
-			logger.info("WARN : " + e.getMessage());
+			LOG.info("WARN : " + e.getMessage());
 			Pattern p = Pattern.compile("(\\w+\\.\\w+\\.\\w+)");
 			Matcher matcher = p.matcher(e.getMessage());
 			while(matcher.find()){
@@ -379,9 +376,9 @@ public class CommonRepositoryImpl<T, ID extends Serializable>
 	public String[] preFieldInfo(String list_ql) {
 		String[] fieldArray;
 		int firstFormIndex = list_ql.indexOf("FROM");
-		logger.info("firstFromIndex={" + firstFormIndex + "}");
+		LOG.info("firstFromIndex={" + firstFormIndex + "}");
 		String prefixFrom = list_ql.substring(0, firstFormIndex);
-		logger.info("prefixFrom={" + prefixFrom + "}");
+		LOG.info("prefixFrom={" + prefixFrom + "}");
 		fieldArray = prefixFrom.replace("SELECT", "").trim().split(",");
 		for (int i = 0; i < fieldArray.length; i++) {
 			String field = fieldArray[i];
@@ -406,7 +403,7 @@ public class CommonRepositoryImpl<T, ID extends Serializable>
 		qlString = qlString.replaceAll("WHERE 1=1", " WHERE 1=1 "
 				+ condition_jpql)
 				+ order_jpql;// 排序位置有待修改
-		logger.info("list_ql = {" + qlString + "}");
+		LOG.info("list_ql = {" + qlString + "}");
 		return qlString;
 	}
 
@@ -468,7 +465,7 @@ public class CommonRepositoryImpl<T, ID extends Serializable>
 		if (orders.size() > 0) {
 			c.replace(c.length() - 1, c.length(), "");
 		}
-		logger.info("order = {" + c.toString() + "}");
+		LOG.info("order = {" + c.toString() + "}");
 		return c.toString();
 	}
 
@@ -483,7 +480,7 @@ public class CommonRepositoryImpl<T, ID extends Serializable>
 				.replaceAll("select", "SELECT").replaceAll("where", "WHERE")
 				.replaceAll("order by", "ORDER BY").replaceAll("asc", "ASC")
 				.replaceAll("desc", "DESC").trim();
-		logger.info("qlString = {" + result + "}");
+		LOG.info("qlString = {" + result + "}");
 		return result;
 	}
 
@@ -497,7 +494,7 @@ public class CommonRepositoryImpl<T, ID extends Serializable>
 	 */
 	protected String preQLAndParam(String qlString, Map<String, Object> params,
 			List<Object> values) {
-		logger.info("开始解析qlString：{" + qlString + "}");
+		LOG.info("开始解析qlString：{" + qlString + "}");
 		Map<Integer, Object> map_values = new HashMap<Integer, Object>();
 		Map<Integer, String> map_names = new HashMap<Integer, String>();
 		List<Integer> list = new ArrayList<Integer>();
@@ -511,11 +508,11 @@ public class CommonRepositoryImpl<T, ID extends Serializable>
 				map_values.put(index, value);
 				map_names.put(index, key);
 			}
-			logger.info("解析完成qlString:{" + preQL + "}");
+			LOG.info("解析完成qlString:{" + preQL + "}");
 			Collections.sort(list);
-			logger.info("最终参数值顺序(参数名->参数位置->参数值)：");
+			LOG.info("最终参数值顺序(参数名->参数位置->参数值)：");
 			for (Integer position : list) {
-				if (logger.isDebugEnabled()) {
+				if (LOG.isDebugEnabled()) {
 					System.out.println(map_names.get(position) + "->"
 							+ position + "->" + map_values.get(position));
 				}
@@ -544,9 +541,15 @@ public class CommonRepositoryImpl<T, ID extends Serializable>
 					if(relateType==null){
 						relateType = RelateType.AND;
 					}
-					related = relateType  + (isPrefixBrackets?" ( ": " ");
+					related = relateType  + (isPrefixBrackets ? 
+							StringUtils.isEmpty(condition.getPreffixBracketsValue()) ? " ( " : " " + 
+								condition.getPreffixBracketsValue() + " " 
+							: " ");
 				}else{
-					related = "" + (isPrefixBrackets?" ( ": " ");
+					related = "" + (isPrefixBrackets ? 
+							StringUtils.isEmpty(condition.getPreffixBracketsValue()) ? " ( " : " " + 
+							condition.getPreffixBracketsValue() + " " 
+						: " ");
 				}
 				c.append(groupPrefixBrackets);
 				switch (operation) {
@@ -648,11 +651,13 @@ public class CommonRepositoryImpl<T, ID extends Serializable>
 				default:
 					break;
 				}
-				c.append(isSuffixBrackets?" ) ": " ");
+				c.append(isSuffixBrackets ? 
+						StringUtils.isEmpty(condition.getSuffixBracketsValue()) ? " ) " : " " + condition.getSuffixBracketsValue() + " " 
+								: " ");
 			}
 			c.append(" ) ");
 		}
-		logger.info("condition = {" + c.toString() + "}");
+		LOG.info("condition = {" + c.toString() + "}");
 		return c.toString();
 	}
 	
@@ -679,14 +684,14 @@ public class CommonRepositoryImpl<T, ID extends Serializable>
 		if (conIndex == -1) {
 			throw new RuntimeException("ql中没有WHERE 1=1");
 		}
-		logger.info("conIndex = {" + conIndex + "}");
+		LOG.info("conIndex = {" + conIndex + "}");
 		String conBefore = qlString.substring(0, conIndex);
 		String conAfter = qlString.substring(conIndex);
 		int conBeforeCount = counter(conBefore, '?');
 		int conAfterCount = counter(conAfter, '?');
-		logger.info("条件前的?个数：{" + conBeforeCount + "}");
-		logger.info("条件后的?个数：{" + conAfterCount + "}");
-		logger.info("条件的起始位置：{" + conBeforeCount + "}");
+		LOG.info("条件前的?个数：{" + conBeforeCount + "}");
+		LOG.info("条件后的?个数：{" + conAfterCount + "}");
+		LOG.info("条件的起始位置：{" + conBeforeCount + "}");
 		return conBeforeCount;
 	}
 
@@ -715,7 +720,7 @@ public class CommonRepositoryImpl<T, ID extends Serializable>
 		list = query.getResultList();
 		if (list.size() == 1) {
 			int totalRows = Integer.parseInt(list.get(0).toString());
-			logger.info("executeCount totalRows = {" + totalRows + "}");
+			LOG.info("executeCount totalRows = {" + totalRows + "}");
 			pageBean.setTotalRows(totalRows);
 		} else {
 			pageBean.setTotalRows(list.size());
