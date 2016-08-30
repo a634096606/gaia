@@ -24,6 +24,42 @@ import org.springframework.util.StringUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ * jqgrid组件解析类，通过jqgrid前台传递的默认参数
+ * <p>
+ * <b>以下为jqgrid传递的查询参数样板</b>
+ * <pre>
+ * 	postData: {
+ * 	  filters: {
+ * 	    groupOp: "AND",
+ * 		rules: [
+ * 			{field: "name", op: "eq", data: "alex"}
+ * 		],
+ * 		groups: [
+ * 					{
+ * 						groupOp: "AND", 
+ * 						rules:[
+ * 							{field: "birthday", op: "gt", data: "2015-01-11", cusType: "date", prefixBrackets:true, groupOp: "AND"},
+ * 							{field: "birthday", op: "lt", data: "2015-01-21", cusType: "date", suffixBrackets: true, groupOp: "AND"},
+ * 						]
+ * 					},
+ * 					{
+ * 						groupOp: "OR", 
+ * 						rules:[
+ * 							{field: "age", op: "ge", data: 10,  prefixBrackets:true, groupOp: "AND"},
+ * 							{field: "age", op: "le", data: 30,  suffixBrackets: true, groupOp: "AND"},
+ * 						]
+ * 					}
+ * 			]
+ *    }  	
+ *  }
+ * </pre>
+ * 翻译之后为:  
+ * <p>where name = alex and ((birthday > date'2015-01-11' and birthday < date'2015-01-21') or (age > 10 and age < 30) )
+ * 
+ * @author lijian
+ *
+ */
 public class JqGridUtil {
 	public static ObjectMapper objectMapper = new ObjectMapper();
 	public static Map<String, Operation> map = new HashMap<String, Operation>();
@@ -47,33 +83,47 @@ public class JqGridUtil {
 		map.put("bt", Operation.BETWEEN);
 	}
 
+	/**
+	 * 解析jqgrid前台传递的参数，封装成Condition条件对象，然后放入到pageBean对象当中
+	 * @param queryParams jqgrid参数对象
+	 */
 	public static PageBean getPageBean(QueryParams queryParams){
 		PageBean pageBean = new PageBean();
+		//设置当前页
 		pageBean.setCurrentPage(queryParams.getPage()).setRowsPerPage(queryParams.getRows());
+		//最外层的查询条件解析
 		String searchField = queryParams.getSearchField();
 		String SearchString = queryParams.getSearchString();
 		Operation operation = map.get(queryParams.getSearchOper());
 		String sidx = queryParams.getSidx();
 		String sord = queryParams.getSord();
 		if (!StringUtils.isEmpty(searchField)) {
+			//获取最外层的条件，创建Condition并放入到PageBean中
 			pageBean.addCondition(new Condition(searchField, SearchString,
 					operation));
 		}
+		//解析排序字段
 		if (!StringUtils.isEmpty(sidx)) {
 			pageBean.addOrder(new Order(sidx, OrderType.valueOf(sord
 					.toUpperCase())));
 		}
+		//解析多条件DSL语句(详见模板)
 		String content = queryParams.getFilters();
 		if (!StringUtils.isEmpty(content)) {
 			Filters filters;
 			try {
+				//将filtrers json字符串转化为filters对象
 				filters = objectMapper.readValue(content, Filters.class);
 			} catch (Exception e) {
 				e.printStackTrace();
 				throw new RuntimeException(e);
 			} 
+			//对filter当中的日期字段进行处理，如果发现是日期字段，需要把当前的rule条件中的data转换成日期格式
+			//另外：当rule条件中为eq或ne的时候，将原有的条件拆分成两个条件，以达到eq和ne的作用，此任务的目的源于
+			//当出现存入数据库字段为yyyy-MM-dd HH:mm:ss 但查询的时候是yyyy-MM-dd的时候进行隐式的条件变换
 			convertPropertyDataWithDate(filters);
-			//解析最外层条件
+			
+			//解析groups最外层条件
 			String groupOp = filters.getGroupOp();
 			RelateType rootRelateType = null;
 			if(!StringUtils.isEmpty(groupOp)){
@@ -83,35 +133,40 @@ public class JqGridUtil {
 			
 			//解析分组查询条件
 			List<GroupItem> groups = filters.getGroups();
-			if(groups!=null && groups.size()>0){
+			//需要为分组条件中每一个group组中的的首尾加上括号，并且也会根据rule本身是否加上括号进行二度添加括号操作
+			if(groups != null && groups.size() > 0){//当前存在groups条件的时候：
 				for (int i = 0; i < groups.size(); i++) {
 					GroupItem groupItem = groups.get(i);
+					//获取一个group中的统一op，当rule本身没有op时，会以这个统一op为准
 					String suGroupOp = groupItem.getGroupOp().toUpperCase();
 					List<RuleItem> subRuleItems = groupItem.getRules();
 					if(!CollectionUtils.isEmpty(subRuleItems)){
+						//循环当前group下的所有rules，并创建对象的condition对象
 						for (int j = 0; j < subRuleItems.size(); j++) {
 							RuleItem subRuleItem = subRuleItems.get(j);
+							//根据rule本身的数据创建condition对象
 							Condition condition = new Condition(RelateType.valueOf(suGroupOp), subRuleItem
 									.getField(), subRuleItem.getData(), map
 									.get(subRuleItem.getOp().toLowerCase()));
-							if((groups.size()==1  || i==groups.size()-1) && j==0){
+							//当
+							if((groups.size() == 1  || i == groups.size() - 1) && j == 0){
 								condition.setRelateType(null);
-							}else if(!StringUtils.isEmpty(subRuleItem.getGroupOp())){
+							}else if(!StringUtils.isEmpty(subRuleItem.getGroupOp())){//当rule本身含有操作符时，以rule本身为主
 								condition.setRelateType(RelateType.valueOf(subRuleItem.getGroupOp()));
 							}
-							if(j == 0){
+							if(j == 0){//当为group中第一个rule时，需要添加前括号
 								condition.setPrefixBrackets(true);
 								condition.setPreffixBracketsValue(condition.getPreffixBracketsValue() + "(");
 							}
-							if(subRuleItem.isPrefixBrackets()){
+							if(subRuleItem.isPrefixBrackets()){//当此rule为明确指定添加前括号时，需要添加前括号
 								condition.setPrefixBrackets(true);
 								condition.setPreffixBracketsValue(condition.getPreffixBracketsValue() + "(");
 							}
-							if(j == subRuleItems.size()-1){
+							if(j == subRuleItems.size() - 1){//当为group中最后一个rule时，需要添加后括号
 								condition.setSuffixBrackets(true);
 								condition.setSuffixBracketsValue(condition.getSuffixBracketsValue() + ")");
 							}
-							if(subRuleItem.isSuffixBrackets()){
+							if(subRuleItem.isSuffixBrackets()){//当此rule为明确指定添加后括号时，需要添加后括号
 								condition.setSuffixBrackets(true);
 								condition.setSuffixBracketsValue(condition.getSuffixBracketsValue() + ")");
 							}
@@ -119,14 +174,16 @@ public class JqGridUtil {
 						}
 					}
 				}
+				//解析当前filters中的rules条件(与groups并行的条件)
 				List<RuleItem> rules = filters.getRules();
 				if(!CollectionUtils.isEmpty(rules)){
+					//循环所有rules，与groups中的rule操作一致
 					for (int j = 0; j < rules.size(); j++) {
 						RuleItem ruleItem = rules.get(j);
 						Condition condition = new Condition(rootRelateType, ruleItem
 								.getField(), ruleItem.getData(), map
 								.get(ruleItem.getOp().toLowerCase()));
-						if((j==rules.size()-1)){
+						if((j == rules.size() - 1)){
 							condition.setSuffixBrackets(true);
 							condition.setSuffixBracketsValue(condition.getSuffixBracketsValue() + ")");
 						}
@@ -142,7 +199,7 @@ public class JqGridUtil {
 							condition.setPrefixBrackets(true);
 							condition.setPreffixBracketsValue(condition.getPreffixBracketsValue() + "(");
 						}
-						if(groups.size()==0 && j==0){
+						if(groups.size() == 0 && j == 0){
 							condition.setRelateType(null);
 						}else if(!StringUtils.isEmpty(ruleItem.getGroupOp())){
 							condition.setRelateType(RelateType.valueOf(ruleItem.getGroupOp()));
@@ -150,9 +207,10 @@ public class JqGridUtil {
 						pageBean.addCondition(condition);
 					}
 				}
-			}else{
+			}else{//当前不存在groups条件的时候
 				List<RuleItem> rules = filters.getRules();
 				if(!CollectionUtils.isEmpty(rules)){
+					//循环所有rules，与groups中的rule操作一致
 					for (int i = 0; i < rules.size(); i++) {
 						RuleItem ruleItem = rules.get(i);
 						Condition condition = new Condition(rootRelateType, ruleItem
@@ -185,6 +243,7 @@ public class JqGridUtil {
 		return pageBean;
 	}
 	
+	//处理filters中的rules和groups 转换data成为日期类型
 	private static void convertPropertyDataWithDate(Filters filters){
 		if(!CollectionUtils.isEmpty(filters.getRules())){
 			convertRuleDataWithDate(filters.getRules());
@@ -196,15 +255,18 @@ public class JqGridUtil {
 		}
 	}
 	
+	//处理ruleItem中的关于日期类型的数据，需要配合前台的jqgrid自定义dateSearchabaleDeal.js插件进行使用
+	//将插件注册到jqgrid的multableSearch中的OnSearch事件中(以此支持jqgrid原生的多条件检索)
 	private static void convertRuleDataWithDate(List<RuleItem> subRuleItems){
 		List<RuleItem> newRuleItems = new ArrayList<>();
+		//循环rules，对所有date类型的字段进行处理
 		for (int i = 0; i < subRuleItems.size(); i++) {
 			RuleItem subRuleItem = subRuleItems.get(i);
-			if("date".equals(subRuleItem.getCusType())){
+			if("date".equals(subRuleItem.getCusType())){//如果是date字段，那将其转换成统一的yyyy-MM-dd格式的日期字段
 				Object data = subRuleItem.getData();
 				if(StringUtils.isEmpty(data)){
 					newRuleItems.add(subRuleItem);
-				}else{
+				}else{//如果是eq字段则将原有的一个日期条件拆解成两个日期条件，统一变为>=当天 and <下一天的格式
 					if(subRuleItem.getOp().equals("eq")){
 						Date originalDateData = null;
 						try {
@@ -213,25 +275,29 @@ public class JqGridUtil {
 							e.printStackTrace();
 							throw new RuntimeException(e);
 						}
-						Calendar c = Calendar.getInstance();
-						c.setTime(originalDateData);
-						c.add(Calendar.DAY_OF_MONTH, 1);
-						Date nextDay = c.getTime();
+						//拆解等于条件开始
+						//首先将等于变成大于当天时间的条件
 						subRuleItem.setData(originalDateData);
 						subRuleItem.setCusType("date");
 						subRuleItem.setOp("ge");
 						subRuleItem.setPrefixBrackets(true);
 						newRuleItems.add(subRuleItem);
-						//新增下一天
+						
+						//算出第二天的时间
+						Calendar c = Calendar.getInstance();
+						c.setTime(originalDateData);
+						c.add(Calendar.DAY_OF_MONTH, 1);
+						Date nextDay = c.getTime();
+						//然后将再添加小于下一天的条件
 						RuleItem nextDayRule = new RuleItem();
 						nextDayRule.setOp("lt");
-						nextDayRule.setGroupOp("AND");
+						nextDayRule.setGroupOp("AND");//两个条件之间是and操作符
 						nextDayRule.setData(nextDay);
 						nextDayRule.setField(subRuleItem.getField());
 						nextDayRule.setCusType("date");
 						nextDayRule.setSuffixBrackets(true);
 						newRuleItems.add(nextDayRule);
-					}else if(subRuleItem.getOp().equals("ne")){
+					}else if(subRuleItem.getOp().equals("ne")){//如果是ne字段则将原有的一个日期条件拆解成两个日期条件，统一变为<当天  or >=下一天的格式
 						Date originalDateData = null;
 						try {
 							originalDateData = DateUtil.strToDate(data.toString(), "yyyy-MM-dd");
@@ -239,25 +305,30 @@ public class JqGridUtil {
 							e.printStackTrace();
 							throw new RuntimeException(e);
 						}
-						Calendar c = Calendar.getInstance();
-						c.setTime(originalDateData);
-						c.add(Calendar.DAY_OF_MONTH, 1);
-						Date nextDay = c.getTime();
+						//拆解等于条件开始
+						//首先将等于变成小于当天时间的条件
 						subRuleItem.setData(originalDateData);
 						subRuleItem.setCusType("date");
 						subRuleItem.setOp("lt");
 						subRuleItem.setPrefixBrackets(true);
 						newRuleItems.add(subRuleItem);
-						//新增下一天
+						
+						//算出第二天的时间
+						Calendar c = Calendar.getInstance();
+						c.setTime(originalDateData);
+						c.add(Calendar.DAY_OF_MONTH, 1);
+						Date nextDay = c.getTime();
+						
+						//然后将再添加大于等于下一天的条件
 						RuleItem nextDayRule = new RuleItem();
 						nextDayRule.setOp("ge");
-						nextDayRule.setGroupOp("OR");
+						nextDayRule.setGroupOp("OR");//两个条件之间是or操作符
 						nextDayRule.setData(nextDay);
 						nextDayRule.setField(subRuleItem.getField());
 						nextDayRule.setCusType("date");
 						nextDayRule.setSuffixBrackets(true);
 						newRuleItems.add(nextDayRule);
-					}else{
+					}else{//如果仅为日期字段，则只进行日期 类型转换处理
 						//把所有日期字段的值进行转换
 						Date originalDateData = null;
 						try {
@@ -270,10 +341,11 @@ public class JqGridUtil {
 						newRuleItems.add(subRuleItem);
 					}
 				}
-			}else{
+			}else{//如果不为日期字段不进行处理
 				newRuleItems.add(subRuleItem);
 			}
 		}
+		//替换之前的集合，更换为转换后的集合
 		subRuleItems.clear();
 		subRuleItems.addAll(newRuleItems);
 	}	

@@ -283,7 +283,15 @@ public class GeneralDao implements IGeneralDao{
 				}else if(Double.class.getName().equals(clazz)){
 					value = Double.parseDouble(value.toString());
 				}else if(Boolean.class.getName().equals(clazz)){
-					value = Boolean.parseBoolean(value.toString());
+					if("1".equals(value.toString())
+							|| "true".equals(value.toString().toLowerCase())){
+						value = true;
+					}else if("0".equals(value.toString())
+							|| "false".equals(value.toString().toLowerCase())){
+						value = false;
+					}else{
+						value = null;
+					}
 				}else if(Date.class.getName().equals(clazz)){
 					String temp = value.toString().replaceAll("%", "");
 					String pattern = null;

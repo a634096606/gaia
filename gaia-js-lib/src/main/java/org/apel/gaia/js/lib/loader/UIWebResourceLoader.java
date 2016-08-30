@@ -12,8 +12,7 @@ public class UIWebResourceLoader implements ServletContextAware{
 	
 	//构造系统app.js资源
 	private String buildAppjsResource(String contextPath){
-		String jsTempalte = "<script type=\"text/javascript\" src=\"" + contextPath + "/js/app.js\"></script>"
-				+ "<script type=\"text/javascript\" src=\"" + contextPath + "/js/platformUI.js\"></script>"
+		String jsTempalte = "<script type=\"text/javascript\" src=\"" + contextPath + "/js/platformUI.js\"></script>"
 				+ "<script type=\"text/javascript\" src=\"" + contextPath + "/js/date.js\"></script>";
 		return jsTempalte;
 	}

@@ -30,6 +30,7 @@ import org.apel.gaia.util.UUIDUtil;
 import org.hibernate.annotations.QueryHints;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.util.StringUtils;
 
@@ -44,10 +45,15 @@ public class CommonRepositoryImpl<T, ID extends Serializable>
 	
 	private final EntityManager entityManager;
 	
-	public CommonRepositoryImpl(Class<T> domainClass, EntityManager em) {
-		super(domainClass, em);
-		this.entityManager = em;
+	public CommonRepositoryImpl(JpaEntityInformation<T, ?> entityInformation,
+			EntityManager entityManager) {
+		super(entityInformation, entityManager);
+		this.entityManager = entityManager;
 	}
+
+	
+
+
 
 	@Override
 	public void store(Object... item) {
@@ -290,7 +296,15 @@ public class CommonRepositoryImpl<T, ID extends Serializable>
 				}else if(Double.class.getName().equals(clazz)){
 					value = Double.parseDouble(value.toString());
 				}else if(Boolean.class.getName().equals(clazz)){
-					value = Boolean.parseBoolean(value.toString());
+					if("1".equals(value.toString())
+							|| "true".equals(value.toString().toLowerCase())){
+						value = true;
+					}else if("0".equals(value.toString())
+							|| "false".equals(value.toString().toLowerCase())){
+						value = false;
+					}else{
+						value = null;
+					}
 				}else if(Date.class.getName().equals(clazz)){
 					String temp = value.toString().replaceAll("%", "");
 					String pattern = null;
