@@ -33,25 +33,25 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * 	  filters: {
  * 	    groupOp: "OR"
  * 		rules: [
- * 			{field: "name", op: "eq", data: "alex", groupOp: "AND"},
-			{field: "name", op: "eq", data: "alex", groupOp: "AND"}
+ * 		  {field: "name", op: "eq", data: "alex", groupOp: "AND"},
+		  {field: "name", op: "eq", data: "alex", groupOp: "AND"}
  * 		],
- * 		groups: [
- * 					{
- * 						groupOp: "AND", 
- * 						rules:[
- * 							{field: "birthday", op: "gt", data: "2015-01-11", cusType: "date", prefixBrackets:true, groupOp: "AND"},
- * 							{field: "birthday", op: "lt", data: "2015-01-21", cusType: "date", suffixBrackets: true, groupOp: "AND"},
- * 						]
- * 					},
- * 					{
- * 						groupOp: "OR", 
- * 						rules:[
- * 							{field: "age", op: "ge", data: 10,  prefixBrackets:true, groupOp: "AND"},
- * 							{field: "age", op: "le", data: 30,  suffixBrackets: true, groupOp: "AND"},
- * 						]
- * 					}
+ * 		groups: 
+ * 		[{
+ * 			groupOp: "AND", 
+ * 			rules:[
+ * 			  {field: "birthday", op: "gt", data: "2015-01-11", cusType: "date", prefixBrackets:true, groupOp: "AND"},
+ * 			  {field: "birthday", op: "lt", data: "2015-01-21", cusType: "date", suffixBrackets: true, groupOp: "AND"},
  * 			]
+ * 		  },
+ * 		  {
+ * 			groupOp: "OR", 
+ * 			rules:[
+ * 			  {field: "age", op: "ge", data: 10,  prefixBrackets:true, groupOp: "AND"},
+ * 			  {field: "age", op: "le", data: 30,  suffixBrackets: true, groupOp: "AND"},
+ * 			]
+ * 	      }
+ * 		]
  *    }  	
  *  }
  * </pre>
@@ -60,6 +60,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * <p>
  * <b>规则</b>
  * <p>当内层rule任何一个都没有op时，外层op为and;当内部rule有op时，拥有自定义op的rule会覆盖外层的op，没有自定义op时，外层op作为rule的op</p>
+ * 
  * @author lijian
  *
  */
