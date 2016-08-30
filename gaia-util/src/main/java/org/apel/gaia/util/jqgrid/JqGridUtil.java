@@ -31,9 +31,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * <pre>
  * 	postData: {
  * 	  filters: {
- * 	    groupOp: "AND",
+ * 	    groupOp: "OR"
  * 		rules: [
- * 			{field: "name", op: "eq", data: "alex"}
+ * 			{field: "name", op: "eq", data: "alex", groupOp: "AND"},
+			{field: "name", op: "eq", data: "alex", groupOp: "AND"}
  * 		],
  * 		groups: [
  * 					{
@@ -56,7 +57,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * </pre>
  * 翻译之后为:  
  * <p>where name = alex and ((birthday > date'2015-01-11' and birthday < date'2015-01-21') or (age > 10 and age < 30) )
- * 
+ * <p>
+ * <b>规则</b>
+ * <p>当内层rule任何一个都没有op时，外层op为and;当内部rule有op时，拥有自定义op的rule会覆盖外层的op，没有自定义op时，外层op作为rule的op</p>
  * @author lijian
  *
  */
@@ -85,6 +88,7 @@ public class JqGridUtil {
 
 	/**
 	 * 解析jqgrid前台传递的参数，封装成Condition条件对象，然后放入到pageBean对象当中
+	 * 
 	 * @param queryParams jqgrid参数对象
 	 */
 	public static PageBean getPageBean(QueryParams queryParams){
@@ -137,111 +141,66 @@ public class JqGridUtil {
 			if(groups != null && groups.size() > 0){//当前存在groups条件的时候：
 				for (int i = 0; i < groups.size(); i++) {
 					GroupItem groupItem = groups.get(i);
-					//获取一个group中的统一op，当rule本身没有op时，会以这个统一op为准
+					//获取一个group中的统一op，当rule本身没有op时，会以这个统一op为准(前提是所有内部rule都没有op)
 					String suGroupOp = groupItem.getGroupOp().toUpperCase();
+					RelateType suGroupOpEnum = RelateType.valueOf(suGroupOp);
 					List<RuleItem> subRuleItems = groupItem.getRules();
-					if(!CollectionUtils.isEmpty(subRuleItems)){
-						//循环当前group下的所有rules，并创建对象的condition对象
-						for (int j = 0; j < subRuleItems.size(); j++) {
-							RuleItem subRuleItem = subRuleItems.get(j);
-							//根据rule本身的数据创建condition对象
-							Condition condition = new Condition(RelateType.valueOf(suGroupOp), subRuleItem
-									.getField(), subRuleItem.getData(), map
-									.get(subRuleItem.getOp().toLowerCase()));
-							//当
-							if((groups.size() == 1  || i == groups.size() - 1) && j == 0){
-								condition.setRelateType(null);
-							}else if(!StringUtils.isEmpty(subRuleItem.getGroupOp())){//当rule本身含有操作符时，以rule本身为主
-								condition.setRelateType(RelateType.valueOf(subRuleItem.getGroupOp()));
-							}
-							if(j == 0){//当为group中第一个rule时，需要添加前括号
-								condition.setPrefixBrackets(true);
-								condition.setPreffixBracketsValue(condition.getPreffixBracketsValue() + "(");
-							}
-							if(subRuleItem.isPrefixBrackets()){//当此rule为明确指定添加前括号时，需要添加前括号
-								condition.setPrefixBrackets(true);
-								condition.setPreffixBracketsValue(condition.getPreffixBracketsValue() + "(");
-							}
-							if(j == subRuleItems.size() - 1){//当为group中最后一个rule时，需要添加后括号
-								condition.setSuffixBrackets(true);
-								condition.setSuffixBracketsValue(condition.getSuffixBracketsValue() + ")");
-							}
-							if(subRuleItem.isSuffixBrackets()){//当此rule为明确指定添加后括号时，需要添加后括号
-								condition.setSuffixBrackets(true);
-								condition.setSuffixBracketsValue(condition.getSuffixBracketsValue() + ")");
-							}
-							pageBean.addCondition(condition);
-						}
-					}
-				}
-				//解析当前filters中的rules条件(与groups并行的条件)
-				List<RuleItem> rules = filters.getRules();
-				if(!CollectionUtils.isEmpty(rules)){
-					//循环所有rules，与groups中的rule操作一致
-					for (int j = 0; j < rules.size(); j++) {
-						RuleItem ruleItem = rules.get(j);
-						Condition condition = new Condition(rootRelateType, ruleItem
-								.getField(), ruleItem.getData(), map
-								.get(ruleItem.getOp().toLowerCase()));
-						if((j == rules.size() - 1)){
-							condition.setSuffixBrackets(true);
-							condition.setSuffixBracketsValue(condition.getSuffixBracketsValue() + ")");
-						}
-						if(ruleItem.isSuffixBrackets()){
-							condition.setSuffixBrackets(true);
-							condition.setSuffixBracketsValue(condition.getSuffixBracketsValue() + ")");
-						}
-						if(j == 0){
-							condition.setPrefixBrackets(true);
-							condition.setPreffixBracketsValue(condition.getPreffixBracketsValue() + "(");
-						}
-						if(ruleItem.isPrefixBrackets()){
-							condition.setPrefixBrackets(true);
-							condition.setPreffixBracketsValue(condition.getPreffixBracketsValue() + "(");
-						}
-						if(groups.size() == 0 && j == 0){
-							condition.setRelateType(null);
-						}else if(!StringUtils.isEmpty(ruleItem.getGroupOp())){
-							condition.setRelateType(RelateType.valueOf(ruleItem.getGroupOp()));
-						}
-						pageBean.addCondition(condition);
-					}
-				}
-			}else{//当前不存在groups条件的时候
-				List<RuleItem> rules = filters.getRules();
-				if(!CollectionUtils.isEmpty(rules)){
-					//循环所有rules，与groups中的rule操作一致
-					for (int i = 0; i < rules.size(); i++) {
-						RuleItem ruleItem = rules.get(i);
-						Condition condition = new Condition(rootRelateType, ruleItem
-								.getField(), ruleItem.getData(), map
-								.get(ruleItem.getOp().toLowerCase()));
-						if(i==0){
-							condition.setPrefixBrackets(true);
-							condition.setPreffixBracketsValue(condition.getPreffixBracketsValue() + "(");
-						}
-						if(ruleItem.isPrefixBrackets()){
-							condition.setPrefixBrackets(true);
-							condition.setPreffixBracketsValue(condition.getPreffixBracketsValue() + "(");
-						}
-						if((i==rules.size()-1)){
-							condition.setSuffixBrackets(true);
-							condition.setSuffixBracketsValue(condition.getSuffixBracketsValue() + ")");
-						}
-						if(ruleItem.isSuffixBrackets()){
-							condition.setSuffixBrackets(true);
-							condition.setSuffixBracketsValue(condition.getSuffixBracketsValue() + ")");
-						}
-						if(!StringUtils.isEmpty(ruleItem.getGroupOp())){
-							condition.setRelateType(RelateType.valueOf(ruleItem.getGroupOp()));
-						}
-						pageBean.addCondition(condition);
-					}
+					buildCondition(pageBean, subRuleItems, suGroupOpEnum);
 				}
 			}
+			//解析当前filters中的rules条件(与groups并行的条件)
+			List<RuleItem> rules = filters.getRules();
+			buildCondition(pageBean, rules, rootRelateType);
 		}
 		return pageBean;
 	}
+	
+	//根据rule构造condition
+	private static void buildCondition(PageBean pageBean, List<RuleItem> rules, RelateType outterRelateType){
+		if(!CollectionUtils.isEmpty(rules)){
+			//记录第一个条件
+			boolean flag=false;
+			Condition firstCondition=null;
+			//循环所有rules，与groups中的rule操作一致
+			for (int i = 0; i < rules.size(); i++) {
+				RuleItem ruleItem = rules.get(i);
+				//根据rule本身的数据创建condition对象
+				Condition condition = new Condition(outterRelateType, ruleItem
+						.getField(), ruleItem.getData(), map
+						.get(ruleItem.getOp().toLowerCase()));
+				if(i==0){//当为第一个rule时，需要添加前括号
+					firstCondition=condition;
+					condition.setPrefixBrackets(true);
+					condition.setPreffixBracketsValue(condition.getPreffixBracketsValue() + "(");
+				}
+				if((i==rules.size()-1)){//当为最后一个rule时，需要添加后括号
+					condition.setSuffixBrackets(true);
+					condition.setSuffixBracketsValue(condition.getSuffixBracketsValue() + ")");
+				}
+				if(ruleItem.isPrefixBrackets()){//当此rule为明确指定添加前括号时，需要添加前括号
+					condition.setPrefixBrackets(true);
+					condition.setPreffixBracketsValue(condition.getPreffixBracketsValue() + "(");
+				}
+				if(ruleItem.isSuffixBrackets()){//当此rule为明确指定添加后括号时，需要添加后括号
+					condition.setSuffixBrackets(true);
+					condition.setSuffixBracketsValue(condition.getSuffixBracketsValue() + ")");
+				}
+				//当内部rule有op的时候，把当前的condition条件设置为内部op的值 
+				if(!StringUtils.isEmpty(ruleItem.getGroupOp())){
+					flag = true;
+					condition.setRelateType(RelateType.valueOf(ruleItem.getGroupOp()));
+				}
+				pageBean.addCondition(condition);
+			}
+			if(!flag){
+				if(firstCondition!=null){//当所有rule都没有自定义的op时，将最外层(第一个rule对应的)的condition op设置为and(null会被持久层组件解析为and)
+					//当前所有rules没有op时，外层用默认and衔接
+					firstCondition.setRelateType(null);
+				}
+			}
+		}
+	}
+	
 	
 	//处理filters中的rules和groups 转换data成为日期类型
 	private static void convertPropertyDataWithDate(Filters filters){
@@ -284,18 +243,10 @@ public class JqGridUtil {
 						newRuleItems.add(subRuleItem);
 						
 						//算出第二天的时间
-						Calendar c = Calendar.getInstance();
-						c.setTime(originalDateData);
-						c.add(Calendar.DAY_OF_MONTH, 1);
-						Date nextDay = c.getTime();
+						Date nextDay = calculateNextDay(originalDateData);
+						
 						//然后将再添加小于下一天的条件
-						RuleItem nextDayRule = new RuleItem();
-						nextDayRule.setOp("lt");
-						nextDayRule.setGroupOp("AND");//两个条件之间是and操作符
-						nextDayRule.setData(nextDay);
-						nextDayRule.setField(subRuleItem.getField());
-						nextDayRule.setCusType("date");
-						nextDayRule.setSuffixBrackets(true);
+						RuleItem nextDayRule = new RuleItem(subRuleItem.getField(), "lt", nextDay, "date", false, true, "AND");
 						newRuleItems.add(nextDayRule);
 					}else if(subRuleItem.getOp().equals("ne")){//如果是ne字段则将原有的一个日期条件拆解成两个日期条件，统一变为<当天  or >=下一天的格式
 						Date originalDateData = null;
@@ -313,20 +264,10 @@ public class JqGridUtil {
 						subRuleItem.setPrefixBrackets(true);
 						newRuleItems.add(subRuleItem);
 						
-						//算出第二天的时间
-						Calendar c = Calendar.getInstance();
-						c.setTime(originalDateData);
-						c.add(Calendar.DAY_OF_MONTH, 1);
-						Date nextDay = c.getTime();
+						Date nextDay = calculateNextDay(originalDateData);
 						
 						//然后将再添加大于等于下一天的条件
-						RuleItem nextDayRule = new RuleItem();
-						nextDayRule.setOp("ge");
-						nextDayRule.setGroupOp("OR");//两个条件之间是or操作符
-						nextDayRule.setData(nextDay);
-						nextDayRule.setField(subRuleItem.getField());
-						nextDayRule.setCusType("date");
-						nextDayRule.setSuffixBrackets(true);
+						RuleItem nextDayRule = new RuleItem(subRuleItem.getField(), "ge", nextDay, "date", false, true, "OR");
 						newRuleItems.add(nextDayRule);
 					}else{//如果仅为日期字段，则只进行日期 类型转换处理
 						//把所有日期字段的值进行转换
@@ -348,6 +289,15 @@ public class JqGridUtil {
 		//替换之前的集合，更换为转换后的集合
 		subRuleItems.clear();
 		subRuleItems.addAll(newRuleItems);
+	}
+
+	//算出下一天的时间
+	private static Date calculateNextDay(Date originalDateData) {
+		Calendar c = Calendar.getInstance();
+		c.setTime(originalDateData);
+		c.add(Calendar.DAY_OF_MONTH, 1);
+		Date nextDay = c.getTime();
+		return nextDay;
 	}	
 	
 }

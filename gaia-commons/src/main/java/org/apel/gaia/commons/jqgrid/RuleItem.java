@@ -9,6 +9,22 @@ public class RuleItem {
 	private boolean suffixBrackets;
 	private String groupOp;
 	
+	public RuleItem() {
+		
+	}
+
+	public RuleItem(String field, String op, Object data, String cusType,
+			boolean prefixBrackets, boolean suffixBrackets, String groupOp) {
+		super();
+		this.field = field;
+		this.op = op;
+		this.data = data;
+		this.cusType = cusType;
+		this.prefixBrackets = prefixBrackets;
+		this.suffixBrackets = suffixBrackets;
+		this.groupOp = groupOp;
+	}
+
 	public String getCusType() {
 		return cusType;
 	}

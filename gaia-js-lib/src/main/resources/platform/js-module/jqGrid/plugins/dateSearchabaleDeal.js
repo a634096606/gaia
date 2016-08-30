@@ -33,7 +33,7 @@ function FieldtypeAddtioner(searchList){
 			for(var i = 0;i < colModels.length; i++){
 				var col = colModels[i];
 				//判断是否是日期字段，如果增加参数类型
-				if((col.formatter=="date"||col.isExpDate)
+				if((col.formatter=="date"||col.cusType == "date")
 						&& col.index == this.field){
 					cusType = "date";
 				}
