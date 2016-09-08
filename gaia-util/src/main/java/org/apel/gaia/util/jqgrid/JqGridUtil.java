@@ -59,7 +59,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * <p>where name = alex and ((birthday > date'2015-01-11' and birthday < date'2015-01-21') or (age > 10 and age < 30) )
  * <p>
  * <b>规则</b>
- * <p>当内层rule任何一个都没有op时，外层op为and;当内部rule有op时，拥有自定义op的rule会覆盖外层的op，没有自定义op时，外层op作为rule的op</p>
+ * <p>当内层rule任何一个都没有op时，内层op为and;当内部rule有op时，拥有自定义op的rule会覆盖外层的op，没有自定义op时，外层op作为rule的op</p>
  * 
  * @author lijian
  *
