@@ -72,6 +72,14 @@ public class UIWebResourceLoader implements ServletContextAware{
 		return css + js;
 	}
 	
+	//构造bootstrap validate资源
+		private String buildBootstrapValidateResource(String contextPath){
+			String css = "<link href=\"" + contextPath + "/js-module/bootstrap-validate/css/bootstrapValidator.min.css\" rel=\"stylesheet\"/>";
+			String js = "<script type=\"text/javascript\" src=\"" + contextPath + "/js-module/bootstrap-validate/js/bootstrapValidator.min.js\"></script>";
+			String js_18n = "<script type=\"text/javascript\" src=\"" + contextPath + "/js-module/bootstrap-validate/js/language/zh_CN.js\"></script>";
+			return css + js + js_18n;
+		}
+	
 	//构造jquery validate资源
 	private String buildJqueryValidate(String contextPath){
 		String local_js = "<script type=\"text/javascript\" src=\"" + contextPath + "/js-module/jquery-validate/localization/messages_zh.js\"></script>";
@@ -120,6 +128,7 @@ public class UIWebResourceLoader implements ServletContextAware{
 		servletContext.setAttribute(UIConsist.APP_JS,buildAppjsResource(contextPath));
 		servletContext.setAttribute(UIConsist.COLOR_PICKER,buildColorPicker(contextPath));
 		servletContext.setAttribute(UIConsist.AJAX_UPLOAD,buildAjaxUpload(contextPath));
+		servletContext.setAttribute(UIConsist.BOOTSTRAP_VALIDATE,buildBootstrapValidateResource(contextPath));
 	}
 	
 	

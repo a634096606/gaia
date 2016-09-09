@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <title>404</title>
 <link href="${request.contextPath}/css/error.css" rel="stylesheet" type="text/css" />
+${jsContext}
+<script type="text/javascript" src="${request.contextPath}/js/commonPage.js"></script>
 </head>
 <body>
 	<div class="pd">
@@ -17,7 +19,7 @@
 			</div>
 			<div class="text_center">
 				<input name="button22" type="button" class="btn_b_green" style="cursor: pointer;"
-					onclick="location.href='${request.contextPath}';" value="刷新页面" />
+					onclick="commonRefresh();" value="刷新页面" />
 			</div>
 		</div>
 	</div>
