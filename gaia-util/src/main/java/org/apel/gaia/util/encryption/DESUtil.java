@@ -143,7 +143,8 @@ public abstract class DESUtil {
 	
 	public static byte[] initKey(String seed) throws Exception {
 		KeyGenerator kg = KeyGenerator.getInstance(KEY_ALGORITHM);
-		SecureRandom secureRandom = new SecureRandom(new Base64().decode(seed));  
+		SecureRandom secureRandom = SecureRandom.getInstance("SHA1PRNG");
+		secureRandom.setSeed(new Base64().decode(seed));
 		kg.init(secureRandom);
 		SecretKey secretKey = kg.generateKey();
 		return secretKey.getEncoded();
