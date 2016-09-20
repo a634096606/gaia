@@ -111,6 +111,14 @@ public class UIWebResourceLoader implements ServletContextAware{
 	private String buildAjaxUpload(String contextPath){
 		return "<script type=\"text/javascript\" src=\"" + contextPath + "/js-module/ajaxUpload/jquery.ajaxfileupload.js\"></script>";
 	}
+	
+	//构造colorPicker资源
+	private String buildPjax(String contextPath){
+		String pjax_js = "<script type=\"text/javascript\" src=\"" + contextPath + "/js-module/noprogress/jquery.pjax.js\"></script>";
+		String noprogress_css = "<link href=\"" + contextPath + "/js-module/noprogress/nprogress.css\" rel=\"stylesheet\"/>";
+		String noprogress_js = "<script type=\"text/javascript\" src=\"" + contextPath + "/js-module/noprogress/nprogress.js\"></script>";
+		return pjax_js + noprogress_css + noprogress_js;
+	}
 
 	@Override
 	public void setServletContext(ServletContext servletContext) {
@@ -129,6 +137,7 @@ public class UIWebResourceLoader implements ServletContextAware{
 		servletContext.setAttribute(UIConsist.COLOR_PICKER,buildColorPicker(contextPath));
 		servletContext.setAttribute(UIConsist.AJAX_UPLOAD,buildAjaxUpload(contextPath));
 		servletContext.setAttribute(UIConsist.BOOTSTRAP_VALIDATE,buildBootstrapValidateResource(contextPath));
+		servletContext.setAttribute(UIConsist.PJAX,buildPjax(contextPath));
 	}
 	
 	
