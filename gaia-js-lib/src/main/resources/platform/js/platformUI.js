@@ -12,6 +12,7 @@ function UIContext(){
 		var ids = $("#" + gridId).jqGrid ('getGridParam', 'selarrrow');
 		var postData = $("#" + gridId).jqGrid ('getGridParam', 'postData');
 		var caption = $("#" + gridId).jqGrid ('getGridParam', 'caption');
+		var expType = [];
 		var fields = [];
 		var enabledColNameIndex = [];
 		for(var i = 0;i < colModels.length; i++){
@@ -19,6 +20,10 @@ function UIContext(){
 			if(!col.hidden && col.name != "cb" && col.name.indexOf("customColumn") == -1){
 				enabledColNameIndex.push(i);
 				fields.push(col.index + "=" + col.name);
+				//判断有无导出类型，若有则添加传入后台
+				if(col.expType && col.expValue){
+					expType.push({field:col.index,type:col.expType,value:col.expValue});
+				}
 			}
 		}
 		var filterColNames = [];
@@ -29,6 +34,7 @@ function UIContext(){
 		var colNameParam = filterColNames.join();
 		//装载列表头参数，列表字段参数
 		var params = {};
+		params.exportTypes = JSON.stringify(expType);
 		params.colNameParam = colNameParam;
 		params.fieldsParam = fieldsParam;
 		if(ids.length != 0){

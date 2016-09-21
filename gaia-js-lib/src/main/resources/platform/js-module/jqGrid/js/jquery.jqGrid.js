@@ -5579,7 +5579,7 @@ $.extend($.jgrid,{
 			$(".ui-jqdialog-titlebar-close",mh).css("left",0.3+"em");
 		} else {
 			mw.dir = "ltr";
-			$(".ui-jqdialog-title",mh).css("float","left");
+			$(".ui-jqdialog-title",mh).css("float","");
 			$(".ui-jqdialog-titlebar-close",mh).css("right",0.3+"em");
 		}
 		var mc = document.createElement('div');

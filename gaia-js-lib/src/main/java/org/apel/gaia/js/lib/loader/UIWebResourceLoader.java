@@ -119,6 +119,12 @@ public class UIWebResourceLoader implements ServletContextAware{
 		String noprogress_js = "<script type=\"text/javascript\" src=\"" + contextPath + "/js-module/noprogress/nprogress.js\"></script>";
 		return pjax_js + noprogress_css + noprogress_js;
 	}
+	
+	//构造系统layer.js资源
+	private String buildLayerjsResource(String contextPath){
+		String jsTempalte = "<script type=\"text/javascript\" src=\"" + contextPath + "/js-module/layer/layer.js\"></script>";
+		return jsTempalte;
+	}
 
 	@Override
 	public void setServletContext(ServletContext servletContext) {
@@ -138,6 +144,7 @@ public class UIWebResourceLoader implements ServletContextAware{
 		servletContext.setAttribute(UIConsist.AJAX_UPLOAD,buildAjaxUpload(contextPath));
 		servletContext.setAttribute(UIConsist.BOOTSTRAP_VALIDATE,buildBootstrapValidateResource(contextPath));
 		servletContext.setAttribute(UIConsist.PJAX,buildPjax(contextPath));
+		servletContext.setAttribute(UIConsist.LAYER_JS,buildLayerjsResource(contextPath));
 	}
 	
 	

@@ -16,5 +16,6 @@ public interface UIConsist {
 	public static final String AJAX_UPLOAD = "ajaxUpload";
 	public static final String BOOTSTRAP_VALIDATE = "bootstrap_validate";
 	public static final String PJAX = "pjax";
+	public static final String LAYER_JS = "layerJs";
 	
 }
