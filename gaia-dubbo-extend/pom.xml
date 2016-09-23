@@ -8,6 +8,10 @@
 	</parent>
 	<artifactId>gaia-dubbo-extend</artifactId>
 	
+	<description>
+		平台 dubbo扩展点工程，用于进行自定义dubbo
+	</description>
+	
 	<dependencies>
 		<dependency>
 			<groupId>org.slf4j</groupId>
