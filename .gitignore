@@ -3,3 +3,7 @@
 target
 .classpath
 logs
+/gaia-dubbo-extend/.project
+/gaia-dubbo-extend/.settings
+/gaia-dubbo-extend/target
+/gaia-dubbo-extend/.classpath

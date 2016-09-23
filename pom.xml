@@ -341,5 +341,6 @@
 		<module>gaia-js-lib</module>
 		<module>gaia-jar-build</module>
 		<module>gaia-war-build</module>
+		<module>gaia-dubbo-extend</module>
 	</modules>
 </project>
