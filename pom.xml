@@ -17,12 +17,11 @@
 		<java.version>1.8</java.version>
 		<svnIp>192.168.0.2</svnIp>
 		<nexusAddress>192.168.0.2:81</nexusAddress>
-		<spring.version>4.3.2.RELEASE</spring.version>
 		<slf4j.version>1.7.12</slf4j.version>
 		<logback.version>1.1.7</logback.version>
 		<servlet.version>3.1</servlet.version>
 		<junit.version>4.12</junit.version>
-		<spring.boot.version>1.4.0.RELEASE</spring.boot.version>
+		<spring.boot.version>1.4.1.RELEASE</spring.boot.version>
 		<freemarker.version>2.3.23</freemarker.version>
 		<dubbo.version>2.5.3</dubbo.version>
 		<zkclient.version>0.1</zkclient.version>
@@ -53,14 +52,6 @@
 	<dependencyManagement>
 		<!-- 导入spring依赖管理包 -->
 		<dependencies>
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-framework-bom</artifactId>
-				<version>${spring.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-
 			<!-- 导入spring boot依赖管理包 -->
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
@@ -68,25 +59,6 @@
 				<version>${spring.boot.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
-			</dependency>
-
-			<!-- 导入以slf4j为接口的依赖管理包 -->
-			<dependency>
-				<!-- 转换spring jcl为slf4j -->
-				<groupId>org.slf4j</groupId>
-				<artifactId>jcl-over-slf4j</artifactId>
-				<version>${slf4j.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.slf4j</groupId>
-				<artifactId>slf4j-api</artifactId>
-				<version>${slf4j.version}</version>
-			</dependency>
-			<dependency>
-				<!-- 使用logback作为全局日志实现 -->
-				<groupId>ch.qos.logback</groupId>
-				<artifactId>logback-classic</artifactId>
-				<version>${logback.version}</version>
 			</dependency>
 
 			<!-- 导入 dubbo依赖管理包 -->
@@ -175,21 +147,7 @@
 				<version>11.2</version>
 			</dependency>
 
-			<!-- test -->
-			<dependency>
-				<groupId>junit</groupId>
-				<artifactId>junit</artifactId>
-				<version>${junit.version}</version>
-				<scope>test</scope>
-			</dependency>
-
 			<!-- web相关依赖 管理 -->
-			<!-- freemarker -->
-			<dependency>
-				<groupId>org.freemarker</groupId>
-				<artifactId>freemarker</artifactId>
-				<version>${freemarker.version}</version>
-			</dependency>
 			<dependency>
 				<groupId>javax.servlet</groupId>
 				<artifactId>jstl</artifactId>
