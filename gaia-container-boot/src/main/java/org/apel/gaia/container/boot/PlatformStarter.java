@@ -4,6 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.MultipartAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ImportResource;
 
 /**
@@ -15,8 +16,8 @@ import org.springframework.context.annotation.ImportResource;
 @ImportResource("classpath*:META-INF/spring/module-*.xml")
 public class PlatformStarter {
 	
-	public static void start(String... args){
-		 SpringApplication.run(PlatformStarter.class, args);
+	public static ApplicationContext start(String... args){
+		 return SpringApplication.run(PlatformStarter.class, args);
 	}
 	
 }
