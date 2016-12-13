@@ -125,6 +125,15 @@ public class UIWebResourceLoader implements ServletContextAware{
 		String jsTempalte = "<script type=\"text/javascript\" src=\"" + contextPath + "/js-module/layer/layer.js\"></script>";
 		return jsTempalte;
 	}
+	
+	//构造系统layer.js资源
+		private String buildPnotifyResource(String contextPath){
+			String css1 = "<link href=\"" + contextPath + "/js-module/pnotify/css/animate.css\" rel=\"stylesheet\"/>";
+			String css2 = "<link href=\"" + contextPath + "/js-module/pnotify/css/pnotify.custom.min.css\" rel=\"stylesheet\"/>";
+			String js1 = "<script type=\"text/javascript\" src=\"" + contextPath + "/js-module/pnotify/js/pnotify.custom.min.js\"></script>";
+			String js2 = "<script type=\"text/javascript\" src=\"" + contextPath + "/js-module/pnotify/js/toast.js\"></script>";
+			return css1 + css2 + js1 + js2;
+		}
 
 	@Override
 	public void setServletContext(ServletContext servletContext) {
@@ -145,6 +154,7 @@ public class UIWebResourceLoader implements ServletContextAware{
 		servletContext.setAttribute(UIConsist.BOOTSTRAP_VALIDATE,buildBootstrapValidateResource(contextPath));
 		servletContext.setAttribute(UIConsist.PJAX,buildPjax(contextPath));
 		servletContext.setAttribute(UIConsist.LAYER_JS,buildLayerjsResource(contextPath));
+		servletContext.setAttribute(UIConsist.PNOTIFY,buildPnotifyResource(contextPath));
 	}
 	
 	
