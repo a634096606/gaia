@@ -48,7 +48,7 @@ $(function(){
 	};
 	
 	Toast.pnotify = function(opts){
-		new PNotify(opts);
+		return new PNotify(opts);
 	}
 });
 
