@@ -24,14 +24,21 @@ public class CommonController {
 	@RequestMapping("net_check")
 	public @ResponseBody String netCheck(String url){
 		String result = "ok";
+		URL urlObject = null;
+		HttpURLConnection conn = null;
 		try {
-			URL urlObject = new URL(url);
-			HttpURLConnection conn = (HttpURLConnection)urlObject.openConnection();
+			urlObject = new URL(url);
+			conn = (HttpURLConnection)urlObject.openConnection();
 			conn.setConnectTimeout(200);
+			conn.setReadTimeout(200);
 			conn.getResponseCode();
 		} catch (Exception e) {
 			result = "error";
-		} 
+		} finally{
+			if(conn != null){
+				conn.disconnect();
+			}
+		}
 		return result;
 	}
 
