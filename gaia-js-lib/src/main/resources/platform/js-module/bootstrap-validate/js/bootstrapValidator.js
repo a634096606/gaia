@@ -951,7 +951,8 @@
                                 : $icon.css('cursor', '').popover('destroy');
                         break;
                     default:
-                        (status === this.STATUS_INVALID) ? $errors.show() : $errors.hide();
+//                        (status === this.STATUS_INVALID) ? $errors.show() : $errors.hide();
+                    	 (status === this.STATUS_INVALID) ? $allErrors.filter('[data-bv-result='+that.STATUS_INVALID+']').eq(0).show(): $errors.hide();
                         break;
                 }
 

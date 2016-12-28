@@ -75,7 +75,7 @@ public class UIWebResourceLoader implements ServletContextAware{
 	//构造bootstrap validate资源
 		private String buildBootstrapValidateResource(String contextPath){
 			String css = "<link href=\"" + contextPath + "/js-module/bootstrap-validate/css/bootstrapValidator.min.css\" rel=\"stylesheet\"/>";
-			String js = "<script type=\"text/javascript\" src=\"" + contextPath + "/js-module/bootstrap-validate/js/bootstrapValidator.min.js\"></script>";
+			String js = "<script type=\"text/javascript\" src=\"" + contextPath + "/js-module/bootstrap-validate/js/bootstrapValidator.js\"></script>";
 			String js_18n = "<script type=\"text/javascript\" src=\"" + contextPath + "/js-module/bootstrap-validate/js/language/zh_CN.js\"></script>";
 			return css + js + js_18n;
 		}
