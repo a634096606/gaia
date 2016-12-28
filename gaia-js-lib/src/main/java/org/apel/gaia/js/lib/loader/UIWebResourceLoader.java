@@ -67,7 +67,7 @@ public class UIWebResourceLoader implements ServletContextAware{
 	
 	//构造bootstrap资源
 	private String buildBootstrapResource(String contextPath){
-		String css = "<link href=\"" + contextPath + "/js-module/bootstrap/css/bootstrap.min.css\" rel=\"stylesheet\"/>";
+		String css = "<link href=\"" + contextPath + "/js-module/bootstrap/css/bootstrap.css\" rel=\"stylesheet\"/>";
 		String js = "<script type=\"text/javascript\" src=\"" + contextPath + "/js-module/bootstrap/js/bootstrap.min.js\"></script>";
 		return css + js;
 	}
