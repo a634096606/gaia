@@ -3,12 +3,15 @@ package org.apel.gaia.js.lib.loader;
 import javax.servlet.ServletContext;
 
 import org.apel.gaia.js.lib.consist.UIConsist;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.ServletContextAware;
 
 @Component
 public class UIWebResourceLoader implements ServletContextAware{
 	
+	@Value("${isCDN:false}")
+	private boolean isCDN;
 	
 	//构造系统app.js资源
 	private String buildAppjsResource(String contextPath){
@@ -19,7 +22,12 @@ public class UIWebResourceLoader implements ServletContextAware{
 	
 	//构造jquery的资源
 	private String buildJqueryResource(String contextPath){
-		return "<script type=\"text/javascript\" src=\"" + contextPath + "/jquery/jquery-1.11.3.min.js\"></script>";
+		if(isCDN){
+			return "<script type=\"text/javascript\" src=\"http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js\"></script>";
+		}else{
+			return "<script type=\"text/javascript\" src=\"" + contextPath + "/jquery/jquery-1.11.3.min.js\"></script>";
+		}
+		
 	}
 	
 	//构造toast的资源
@@ -67,16 +75,33 @@ public class UIWebResourceLoader implements ServletContextAware{
 	
 	//构造bootstrap资源
 	private String buildBootstrapResource(String contextPath){
-		String css = "<link href=\"" + contextPath + "/js-module/bootstrap/css/bootstrap.css\" rel=\"stylesheet\"/>";
-		String js = "<script type=\"text/javascript\" src=\"" + contextPath + "/js-module/bootstrap/js/bootstrap.min.js\"></script>";
-		return css + js;
+		String css;
+		String js;
+		if(isCDN){
+			css = "<link href=\"http://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css\" rel=\"stylesheet\"/>";
+			js = "<script type=\"text/javascript\" src=\"http://cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js\"></script>";
+			return css + js;
+		}else{
+			css = "<link href=\"" + contextPath + "/js-module/bootstrap/css/bootstrap.css\" rel=\"stylesheet\"/>";
+			js = "<script type=\"text/javascript\" src=\"" + contextPath + "/js-module/bootstrap/js/bootstrap.min.js\"></script>";
+			return css + js;
+		}
 	}
 	
 	//构造bootstrap validate资源
 		private String buildBootstrapValidateResource(String contextPath){
-			String css = "<link href=\"" + contextPath + "/js-module/bootstrap-validate/css/bootstrapValidator.min.css\" rel=\"stylesheet\"/>";
-			String js = "<script type=\"text/javascript\" src=\"" + contextPath + "/js-module/bootstrap-validate/js/bootstrapValidator.js\"></script>";
-			String js_18n = "<script type=\"text/javascript\" src=\"" + contextPath + "/js-module/bootstrap-validate/js/language/zh_CN.js\"></script>";
+			String css;
+			String js;
+			String js_18n;
+			if(isCDN){
+				css = "<link href=\"http://cdn.bootcss.com/bootstrap-validator/0.5.3/css/bootstrapValidator.min.css\" rel=\"stylesheet\"/>";
+				js = "<script type=\"text/javascript\" src=\"http://cdn.bootcss.com/bootstrap-validator/0.5.3/js/bootstrapValidator.min.js\"></script>";
+				js_18n = "<script type=\"text/javascript\" src=\"http://cdn.bootcss.com/bootstrap-validator/0.5.3/js/language/zh_CN.min.js\"></script>";
+			}else{
+				css = "<link href=\"" + contextPath + "/js-module/bootstrap-validate/css/bootstrapValidator.min.css\" rel=\"stylesheet\"/>";
+				js = "<script type=\"text/javascript\" src=\"" + contextPath + "/js-module/bootstrap-validate/js/bootstrapValidator..js\"></script>";
+				js_18n = "<script type=\"text/javascript\" src=\"" + contextPath + "/js-module/bootstrap-validate/js/language/zh_CN.js\"></script>";
+			}
 			return css + js + js_18n;
 		}
 	
