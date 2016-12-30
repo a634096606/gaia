@@ -204,6 +204,24 @@ public class UIWebResourceLoader implements ServletContextAware{
 			return css + js + i18n_js;
 		}
 	}
+	
+	//构建jquery validation engine
+	private String buildJqValidationEngineResource(String contextPath) {
+		String css;
+		String js;
+		String i18n_js;
+		if(isCDN){
+			css ="<link href=\"http://cdn.bootcss.com/jQuery-Validation-Engine/2.6.4/validationEngine.jquery.min.css\" rel=\"stylesheet\"/>";
+			js = "<script src=\"http://cdn.bootcss.com/jQuery-Validation-Engine/2.6.4/jquery.validationEngine.min.js\" type=\"text/javascript\"></script>";
+			i18n_js = "<script src=\"http://cdn.bootcss.com/jQuery-Validation-Engine/2.6.4/languages/jquery.validationEngine-zh_CN.min.js\"></script>";
+			return css + js + i18n_js;
+		}else{
+			css ="<link href=\"" + contextPath + "/js-module/jquery-validation-engine/validationEngine.jquery.css\" rel=\"stylesheet\"/>";
+			js = "<script src=\"" + contextPath + "/js-module/jquery-validation-engine/jquery.validationEngine-zh_CN.js\" type=\"text/javascript\"></script>";
+			i18n_js = "<script src=\"" + contextPath + "/js-module/jquery-validation-engine/jquery.validationEngine.js\" type=\"text/javascript\"></script>";
+			return css + js + i18n_js;
+		}
+	}
 
 	@Override
 	public void setServletContext(ServletContext servletContext) {
@@ -224,6 +242,7 @@ public class UIWebResourceLoader implements ServletContextAware{
 		servletContext.setAttribute(UIConsist.PNOTIFY,buildPnotifyResource(contextPath));
 		servletContext.setAttribute(UIConsist.BOOTSTRAP_TABLE,buildBootstrapTableResource(contextPath));
 		servletContext.setAttribute(UIConsist.BOOTBOX,buildBootboxResource(contextPath));
+		servletContext.setAttribute(UIConsist.JQUERY_VALIDATION_ENGINE,buildJqValidationEngineResource(contextPath));
 	}
 
 

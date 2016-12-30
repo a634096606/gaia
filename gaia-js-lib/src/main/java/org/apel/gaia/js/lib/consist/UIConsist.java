@@ -17,5 +17,6 @@ public interface UIConsist {
 	public static final String PNOTIFY = "pnotify";
 	public static final String BOOTSTRAP_TABLE = "bootstrap_table";
 	public static final String BOOTBOX = "bootbox";
+	public static final String JQUERY_VALIDATION_ENGINE = "jq_validation_engine";
 	
 }
