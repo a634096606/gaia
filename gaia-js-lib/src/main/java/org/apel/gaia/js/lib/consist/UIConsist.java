@@ -9,14 +9,13 @@ public interface UIConsist {
 	public static final String EASYUI = "easyUI";
 	public static final String DATE97 = "date97";
 	public static final String BOOTSTRAP = "bootstrap";
-	public static final String JQUERY_VALIDATE = "jquery_validate";
-	public static final String VALIDATE_TOOLTIP = "validate_tooltip";
 	public static final String JQUERY_UI = "jqueryUI";
-	public static final String COLOR_PICKER = "colorPicker";
 	public static final String AJAX_UPLOAD = "ajaxUpload";
 	public static final String BOOTSTRAP_VALIDATE = "bootstrap_validate";
 	public static final String PJAX = "pjax";
 	public static final String LAYER_JS = "layerJs";
 	public static final String PNOTIFY = "pnotify";
+	public static final String BOOTSTRAP_TABLE = "bootstrap_table";
+	public static final String BOOTBOX = "bootbox";
 	
 }

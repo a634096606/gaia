@@ -32,17 +32,36 @@ public class UIWebResourceLoader implements ServletContextAware{
 	
 	//构造toast的资源
 	private String buildToastrResource(String contextPath){
-		String css ="<link href=\"" + contextPath + "/js-module/toast/toastr.css\" rel=\"stylesheet\"/>";
-		String js = "<script src=\"" + contextPath + "/js-module/toast/toastr.js\" type=\"text/javascript\"></script>";
-		String setting_js = "<script src=\"" + contextPath + "/js-module/toast/toastr.setting.js\" type=\"text/javascript\"></script>";
-		return css + js + setting_js;
+		String css;
+		String js;
+		String setting_js;
+		if(isCDN){
+			css ="<link href=\"http://cdn.bootcss.com/toastr.js/2.1.3/toastr.min.css\" rel=\"stylesheet\"/>";
+			js = "<script src=\"http://cdn.bootcss.com/toastr.js/2.1.3/toastr.min.js\" type=\"text/javascript\"></script>";
+			setting_js = "<script src=\"" + contextPath + "/js-module/toast/toastr.setting.js\" type=\"text/javascript\"></script>";
+			return css + js + setting_js;
+		}else{
+			css ="<link href=\"" + contextPath + "/js-module/toast/toastr.css\" rel=\"stylesheet\"/>";
+			js = "<script src=\"" + contextPath + "/js-module/toast/toastr.js\" type=\"text/javascript\"></script>";
+			setting_js = "<script src=\"" + contextPath + "/js-module/toast/toastr.setting.js\" type=\"text/javascript\"></script>";
+			return css + js + setting_js;
+		}
+		
 	}
 	
 	//构造zTree的资源
 	private String buildZtreeResource(String contextPath){
-		String css = "<link href=\"" + contextPath + "/js-module/zTree/css/zTreeStyle/zTreeStyle.css\" rel=\"stylesheet\"/>";
-		String js = "<script src=\"" + contextPath + "/js-module/zTree/js/jquery.ztree.all-3.5.min.js\" type=\"text/javascript\"></script>";
-		return css + js;
+		String css;
+		String js;
+		if(isCDN){
+			css = "<link href=\"http://cdn.bootcss.com/zTree.v3/3.5.24/css/zTreeStyle/zTreeStyle.min.css\" rel=\"stylesheet\"/>";
+			js = "<script src=\"http://cdn.bootcss.com/zTree.v3/3.5.27/js/jquery.ztree.all.min.js\" type=\"text/javascript\"></script>";
+			return css + js;
+		}else{
+			css = "<link href=\"" + contextPath + "/js-module/zTree/css/zTreeStyle/zTreeStyle.css\" rel=\"stylesheet\"/>";
+			js = "<script src=\"" + contextPath + "/js-module/zTree/js/jquery.ztree.all-3.5.min.js\" type=\"text/javascript\"></script>";
+			return css + js;
+		}
 	}
 	
 	//构造jqGrid资源 
@@ -89,33 +108,20 @@ public class UIWebResourceLoader implements ServletContextAware{
 	}
 	
 	//构造bootstrap validate资源
-		private String buildBootstrapValidateResource(String contextPath){
-			String css;
-			String js;
-			String js_18n;
-			if(isCDN){
-				css = "<link href=\"http://cdn.bootcss.com/bootstrap-validator/0.5.3/css/bootstrapValidator.min.css\" rel=\"stylesheet\"/>";
-				js = "<script type=\"text/javascript\" src=\"http://cdn.bootcss.com/bootstrap-validator/0.5.3/js/bootstrapValidator.min.js\"></script>";
-				js_18n = "<script type=\"text/javascript\" src=\"http://cdn.bootcss.com/bootstrap-validator/0.5.3/js/language/zh_CN.min.js\"></script>";
-			}else{
-				css = "<link href=\"" + contextPath + "/js-module/bootstrap-validate/css/bootstrapValidator.min.css\" rel=\"stylesheet\"/>";
-				js = "<script type=\"text/javascript\" src=\"" + contextPath + "/js-module/bootstrap-validate/js/bootstrapValidator..js\"></script>";
-				js_18n = "<script type=\"text/javascript\" src=\"" + contextPath + "/js-module/bootstrap-validate/js/language/zh_CN.js\"></script>";
-			}
-			return css + js + js_18n;
+	private String buildBootstrapValidateResource(String contextPath){
+		String css;
+		String js;
+		String js_18n;
+		if(isCDN){
+			css = "<link href=\"http://cdn.bootcss.com/bootstrap-validator/0.5.3/css/bootstrapValidator.min.css\" rel=\"stylesheet\"/>";
+			js = "<script type=\"text/javascript\" src=\"http://cdn.bootcss.com/bootstrap-validator/0.5.3/js/bootstrapValidator.min.js\"></script>";
+			js_18n = "<script type=\"text/javascript\" src=\"http://cdn.bootcss.com/bootstrap-validator/0.5.3/js/language/zh_CN.min.js\"></script>";
+		}else{
+			css = "<link href=\"" + contextPath + "/js-module/bootstrap-validate/css/bootstrapValidator.min.css\" rel=\"stylesheet\"/>";
+			js = "<script type=\"text/javascript\" src=\"" + contextPath + "/js-module/bootstrap-validate/js/bootstrapValidator..js\"></script>";
+			js_18n = "<script type=\"text/javascript\" src=\"" + contextPath + "/js-module/bootstrap-validate/js/language/zh_CN.js\"></script>";
 		}
-	
-	//构造jquery validate资源
-	private String buildJqueryValidate(String contextPath){
-		String local_js = "<script type=\"text/javascript\" src=\"" + contextPath + "/js-module/jquery-validate/localization/messages_zh.js\"></script>";
-		String js = "<script type=\"text/javascript\" src=\"" + contextPath + "/js-module/jquery-validate/jquery.validate.js\"></script>";
-		return  js + local_js;
-	}
-	
-	//构造validate-tooltip资源
-	private String buildValidateTooltip(String contextPath){
-		String js = "<script type=\"text/javascript\" src=\"" + contextPath + "/js-module/validate-toolip/jquery-validate.bootstrap-tooltip.min.js\"></script>";
-		return js;
+		return css + js + js_18n;
 	}
 	
 	//构造jqueryUI资源
@@ -125,19 +131,12 @@ public class UIWebResourceLoader implements ServletContextAware{
 		return css + js;
 	} 
 	
-	//构造colorPicker资源
-	private String buildColorPicker(String contextPath){
-		String css = "<link href=\"" + contextPath + "/js-module/color-picker/css/colorpicker.css\" rel=\"stylesheet\"/>";
-		String js = "<script type=\"text/javascript\" src=\"" + contextPath + "/js-module/color-picker/js/colorpicker.js\"></script>";
-		return css + js;
-	} 
-	
 	//构造系统ajaxUpload资源
 	private String buildAjaxUpload(String contextPath){
 		return "<script type=\"text/javascript\" src=\"" + contextPath + "/js-module/ajaxUpload/jquery.ajaxfileupload.js\"></script>";
 	}
 	
-	//构造colorPicker资源
+	//构造pjax资源
 	private String buildPjax(String contextPath){
 		String pjax_js = "<script type=\"text/javascript\" src=\"" + contextPath + "/js-module/noprogress/jquery.pjax.js\"></script>";
 		String noprogress_css = "<link href=\"" + contextPath + "/js-module/noprogress/nprogress.css\" rel=\"stylesheet\"/>";
@@ -147,18 +146,64 @@ public class UIWebResourceLoader implements ServletContextAware{
 	
 	//构造系统layer.js资源
 	private String buildLayerjsResource(String contextPath){
-		String jsTempalte = "<script type=\"text/javascript\" src=\"" + contextPath + "/js-module/layer/layer.js\"></script>";
+		String jsTempalte;
+		if(isCDN){
+			jsTempalte = "<script type=\"text/javascript\" src=\"http://cdn.bootcss.com/layer/3.0.1/layer.min.js\"></script>";
+		}else{
+			jsTempalte = "<script type=\"text/javascript\" src=\"" + contextPath + "/js-module/layer/layer.js\"></script>";
+		}
 		return jsTempalte;
 	}
 	
 	//构造系统layer.js资源
-		private String buildPnotifyResource(String contextPath){
-			String css1 = "<link href=\"" + contextPath + "/js-module/pnotify/css/animate.css\" rel=\"stylesheet\"/>";
-			String css2 = "<link href=\"" + contextPath + "/js-module/pnotify/css/pnotify.custom.min.css\" rel=\"stylesheet\"/>";
-			String js1 = "<script type=\"text/javascript\" src=\"" + contextPath + "/js-module/pnotify/js/pnotify.custom.min.js\"></script>";
-			String js2 = "<script type=\"text/javascript\" src=\"" + contextPath + "/js-module/pnotify/js/toast.js\"></script>";
+	private String buildPnotifyResource(String contextPath){
+		String css1;
+		String css2;
+		String js1;
+		String js2;
+		if(isCDN){
+			css1 = "<link href=\"http://cdn.bootcss.com/animate.css/3.5.1/animate.min.css\" rel=\"stylesheet\"/>";
+			css2 = "<link href=\"http://cdn.bootcss.com/pnotify/3.0.0/pnotify.min.css\" rel=\"stylesheet\"/>";
+			js1 = "<script type=\"text/javascript\" src=\"http://cdn.bootcss.com/pnotify/3.0.0/pnotify.min.js\"></script>";
+			js2 = "<script type=\"text/javascript\" src=\"" + contextPath + "/js-module/pnotify/js/toast.js\"></script>";
+			return css1 + css2 + js1 + js2;
+		}else{
+			css1 = "<link href=\"" + contextPath + "/js-module/pnotify/css/animate.css\" rel=\"stylesheet\"/>";
+			css2 = "<link href=\"" + contextPath + "/js-module/pnotify/css/pnotify.custom.min.css\" rel=\"stylesheet\"/>";
+			js1 = "<script type=\"text/javascript\" src=\"" + contextPath + "/js-module/pnotify/js/pnotify.custom.min.js\"></script>";
+			js2 = "<script type=\"text/javascript\" src=\"" + contextPath + "/js-module/pnotify/js/toast.js\"></script>";
 			return css1 + css2 + js1 + js2;
 		}
+	}
+	
+	//构造bootstrap bootbox
+	private String buildBootboxResource(String contextPath) {
+		String js;
+		if(isCDN){
+			js = "<script type=\"text/javascript\" src=\"http://cdn.bootcss.com/bootbox.js/4.4.0/bootbox.min.js\"></script>";
+		}else{
+			js = "<script type=\"text/javascript\" src=\"" + contextPath + "/js-module/bootbox/bootbox.min.js\"></script>";
+		}
+		return js;
+	}
+
+	//构造bootstrap table
+	private String buildBootstrapTableResource(String contextPath) {
+		String css;
+		String js;
+		String i18n_js;
+		if(isCDN){
+			css ="<link href=\"http://cdn.bootcss.com/bootstrap-table/1.11.0/bootstrap-table.css\" rel=\"stylesheet\"/>";
+			js = "<script src=\"http://cdn.bootcss.com/bootstrap-table/1.11.0/bootstrap-table.min.js\" type=\"text/javascript\"></script>";
+			i18n_js = "<script src=\"http://cdn.bootcss.com/bootstrap-table/1.11.0/locale/bootstrap-table-zh-CN.js\"></script>";
+			return css + js + i18n_js;
+		}else{
+			css ="<link href=\"" + contextPath + "/js-module/bootstrap-table/bootstrap-table.css\" rel=\"stylesheet\"/>";
+			js = "<script src=\"" + contextPath + "/js-module/bootstrap-table/bootstrap-table.js\" type=\"text/javascript\"></script>";
+			i18n_js = "<script src=\"" + contextPath + "/js-module/bootstrap-table/bootstrap-table-zh-CN.js\" type=\"text/javascript\"></script>";
+			return css + js + i18n_js;
+		}
+	}
 
 	@Override
 	public void setServletContext(ServletContext servletContext) {
@@ -170,18 +215,16 @@ public class UIWebResourceLoader implements ServletContextAware{
 		servletContext.setAttribute(UIConsist.EASYUI,buildEasyUIResource(contextPath));
 		servletContext.setAttribute(UIConsist.DATE97,build97DateResource(contextPath));
 		servletContext.setAttribute(UIConsist.BOOTSTRAP,buildBootstrapResource(contextPath));
-		servletContext.setAttribute(UIConsist.JQUERY_VALIDATE,buildJqueryValidate(contextPath));
-		servletContext.setAttribute(UIConsist.VALIDATE_TOOLTIP,buildValidateTooltip(contextPath));
 		servletContext.setAttribute(UIConsist.JQUERY_UI,buildJqueryUI(contextPath));
 		servletContext.setAttribute(UIConsist.APP_JS,buildAppjsResource(contextPath));
-		servletContext.setAttribute(UIConsist.COLOR_PICKER,buildColorPicker(contextPath));
 		servletContext.setAttribute(UIConsist.AJAX_UPLOAD,buildAjaxUpload(contextPath));
 		servletContext.setAttribute(UIConsist.BOOTSTRAP_VALIDATE,buildBootstrapValidateResource(contextPath));
 		servletContext.setAttribute(UIConsist.PJAX,buildPjax(contextPath));
 		servletContext.setAttribute(UIConsist.LAYER_JS,buildLayerjsResource(contextPath));
 		servletContext.setAttribute(UIConsist.PNOTIFY,buildPnotifyResource(contextPath));
+		servletContext.setAttribute(UIConsist.BOOTSTRAP_TABLE,buildBootstrapTableResource(contextPath));
+		servletContext.setAttribute(UIConsist.BOOTBOX,buildBootboxResource(contextPath));
 	}
-	
-	
+
 
 }
