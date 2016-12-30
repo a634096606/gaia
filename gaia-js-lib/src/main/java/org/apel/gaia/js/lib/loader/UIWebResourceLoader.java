@@ -118,7 +118,7 @@ public class UIWebResourceLoader implements ServletContextAware{
 		if(isCDN){
 			css = "<link href=\"http://cdn.bootcss.com/bootstrap-validator/0.5.3/css/bootstrapValidator.min.css\" rel=\"stylesheet\"/>";
 			js = "<script type=\"text/javascript\" src=\"http://cdn.bootcss.com/bootstrap-validator/0.5.3/js/bootstrapValidator.min.js\"></script>";
-			js_18n = "<script type=\"text/javascript\" src=\"http://cdn.bootcss.com/bootstrap-validator/0.5.3/js/language/zh_CN.min.js\"></script>";
+			js_18n = "<script type=\"text/javascript\" src=\"http://cdn.bootcss.com/bootstrap-validator/0.5.3/js/language/zh_CN.min.js\"></script>"; 
 		}else{
 			css = "<link href=\"" + contextPath + "/js-module/bootstrap-validate/css/bootstrapValidator.min.css\" rel=\"stylesheet\"/>";
 			js = "<script type=\"text/javascript\" src=\"" + contextPath + "/js-module/bootstrap-validate/js/bootstrapValidator.js\"></script>";
