@@ -95,15 +95,18 @@ public class UIWebResourceLoader implements ServletContextAware{
 	//构造bootstrap资源
 	private String buildBootstrapResource(String contextPath){
 		String css;
+		String patch_css;
 		String js;
 		if(isCDN){
 			css = "<link href=\"https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.5/yeti/bootstrap.min.css\" rel=\"stylesheet\"/>";
+			patch_css = "<link href=\"" + contextPath + "/js-module/bootstrap/css/bootstrap.patch.css\" rel=\"stylesheet\"/>";
 			js = "<script type=\"text/javascript\" src=\"http://cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js\"></script>";
-			return css + js;
+			return css + patch_css + js;
 		}else{
 			css = "<link href=\"" + contextPath + "/js-module/bootstrap/css/bootstrap-yeti.min.css\" rel=\"stylesheet\"/>";
+			patch_css = "<link href=\"" + contextPath + "/js-module/bootstrap/css/bootstrap.patch.css\" rel=\"stylesheet\"/>";
 			js = "<script type=\"text/javascript\" src=\"" + contextPath + "/js-module/bootstrap/js/bootstrap.min.js\"></script>";
-			return css + js;
+			return css + patch_css + js;
 		}
 	}
 	
@@ -118,7 +121,7 @@ public class UIWebResourceLoader implements ServletContextAware{
 			js_18n = "<script type=\"text/javascript\" src=\"http://cdn.bootcss.com/bootstrap-validator/0.5.3/js/language/zh_CN.min.js\"></script>";
 		}else{
 			css = "<link href=\"" + contextPath + "/js-module/bootstrap-validate/css/bootstrapValidator.min.css\" rel=\"stylesheet\"/>";
-			js = "<script type=\"text/javascript\" src=\"" + contextPath + "/js-module/bootstrap-validate/js/bootstrapValidator..js\"></script>";
+			js = "<script type=\"text/javascript\" src=\"" + contextPath + "/js-module/bootstrap-validate/js/bootstrapValidator.js\"></script>";
 			js_18n = "<script type=\"text/javascript\" src=\"" + contextPath + "/js-module/bootstrap-validate/js/language/zh_CN.js\"></script>";
 		}
 		return css + js + js_18n;
