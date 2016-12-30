@@ -98,7 +98,7 @@ public class UIWebResourceLoader implements ServletContextAware{
 		String patch_css;
 		String js;
 		if(isCDN){
-			css = "<link href=\"https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.5/yeti/bootstrap.min.css\" rel=\"stylesheet\"/>";
+			css = "<link href=\"http://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css\" rel=\"stylesheet\"/>";
 			patch_css = "<link href=\"" + contextPath + "/js-module/bootstrap/css/bootstrap.patch.css\" rel=\"stylesheet\"/>";
 			js = "<script type=\"text/javascript\" src=\"http://cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js\"></script>";
 			return css + patch_css + js;
