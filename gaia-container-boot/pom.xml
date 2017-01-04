@@ -58,12 +58,12 @@
 		<dependency>
 			<groupId>org.apel</groupId>
 			<artifactId>gaia-commons</artifactId>
-			<version>${project.parent.version}</version>
+			<version>1.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apel</groupId>
 			<artifactId>gaia-util</artifactId>
-			<version>${project.parent.version}</version>
+			<version>1.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 

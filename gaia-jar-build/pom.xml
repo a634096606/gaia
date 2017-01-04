@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.apel</groupId>
 		<artifactId>gaia</artifactId>
-		<version>1.0.1-SNAPSHOT</version>
+		<version>1.0.1-SNAPSHOT</version> 
 	</parent>
 	<artifactId>gaia-jar-build</artifactId>
 	
@@ -25,4 +25,11 @@
 	</build>
 	
 	<!-- 引入需要的依赖，之后执行此项目的package命令将可执行jar包进行输出 -->
+	<dependencies>
+		<dependency>
+			<groupId>org.apel</groupId>
+			<artifactId>compass-web</artifactId>
+			<version>1.0.1-SNAPSHOT</version> 
+		</dependency>
+	</dependencies>
 </project>

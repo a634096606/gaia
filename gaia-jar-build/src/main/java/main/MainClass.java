@@ -1,14 +1,22 @@
 package main;
 
+import java.util.TimeZone;
+
+import org.apel.gaia.container.boot.PlatformStarter;
+
+
+
+
 
 
 
 public class MainClass {
 	
 	//spring boot启动
-//	public static void main(String[] args) throws Exception{
-//		PlatformStarter.start();
-//	}
+	public static void main(String[] args) throws Exception{
+		TimeZone.setDefault(TimeZone.getTimeZone("GMT+8"));
+		PlatformStarter.start(args);
+	}
 	
 //	//dubbo 服务启动
 //	public static void main(String[] args) throws Exception {
