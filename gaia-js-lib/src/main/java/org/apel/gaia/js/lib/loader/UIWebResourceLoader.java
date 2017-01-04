@@ -225,6 +225,24 @@ public class UIWebResourceLoader implements ServletContextAware{
 			return css + js + i18n_js;
 		}
 	}
+	
+	//构建vue.js
+	private String buildVueResource(String contextPath) {
+		String js;
+		if(isCDN){
+			js = "<script type=\"text/javascript\" src=\"http://cdn.bootcss.com/vue/2.1.8/vue.runtime.common.js\"></script>";
+		}else{
+			js = "<script type=\"text/javascript\" src=\"" + contextPath + "/js-module/vue/vue.js\"></script>";
+		}
+		return js;
+	}
+	
+	//构建element-ui
+	private String buildEleResource(String contextPath) {
+		String css ="<link href=\"" + contextPath + "/js-module/ele/index.css\" rel=\"stylesheet\"/>";
+		String js = "<script src=\"" + contextPath + "/js-module/ele/index.js\" type=\"text/javascript\"></script>";
+		return css + js;
+	}
 
 	@Override
 	public void setServletContext(ServletContext servletContext) {
@@ -246,6 +264,8 @@ public class UIWebResourceLoader implements ServletContextAware{
 		servletContext.setAttribute(UIConsist.BOOTSTRAP_TABLE,buildBootstrapTableResource(contextPath));
 		servletContext.setAttribute(UIConsist.BOOTBOX,buildBootboxResource(contextPath));
 		servletContext.setAttribute(UIConsist.JQUERY_VALIDATION_ENGINE,buildJqValidationEngineResource(contextPath));
+		servletContext.setAttribute(UIConsist.VUE,buildVueResource(contextPath));
+		servletContext.setAttribute(UIConsist.ELEMENT_UI,buildEleResource(contextPath));
 	}
 
 
