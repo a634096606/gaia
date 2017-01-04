@@ -1,29 +1,49 @@
-body{font-family: "微软雅黑" ,Arial, Helvetica, sans-serif;font-size:0.75em;font-weight:normal;color:#4e4e4e;margin:0px;padding:0px;background:#F6F8F8;}
-p,from,h1,h2,h3,h4,h5,h6{margin:0px;padding:0px;}
-body,html,form{height:100%; width:100%; }
-ul,ol,li{margin:0px;padding:0px;list-style-type:none; cursor:pointer}
-img{border:none;}
-.clear{ clear:both}
-a{color:#358ec8;text-decoration:none;}
-a:hover{ color:#FF9900;text-decoration:none;}
-input{ border:1px solid #DFE5E7; height:22px; line-height:22px}
-textarea{ width:90%; height:60px;border:1px solid #DFE5E7;}
+@charset "utf-8";
+/* CSS Document */
+body{
+font:14px Arial,verdana,"Lucida Grande","Microsoft Yahei","Hiragino Sans GB","Hiragino Sans GB W3",SimSun,STHeiti;
+color:#69696a;
+word-wrap:break-word; 
+white-space:normal;
+word-break:break-all;}
+img{border:0;}
+div,ul,li,a,body,p,img{
+	margin:0;
+	padding:0;}
+a,a:hover,a:visited,li,a:link{
+	list-style:none;
+	text-decoration:none;}
+a{	
+	color:#4f4f4f;}
+.clear{
+	clear:both;}
+.font12{font-size:12px;}
+.color_w{ color:#fff;}
+span{margin-right:10px;}
 
+/*--------page_show---------------*/
+.page_show{
+	
+	text-align:center;
+	margin:0 auto;}
 
-.pd{ padding:15px}
-.text_center{ text-align:center;margin:0 auto;}
-.error{ border:1px solid #E9E9E9;  background-color:#fff; height:400px; width:80%; margin-top:40px; padding-top:40px }
-.white{ color:#FFFFFF}
-.h{font-size: 120px;font-weight: 700;text-shadow: 0 1px 0 #d9d9d9, 0 2px 0 #d0d0d0, 0 5px 10px rgba(0,0,0,.125), 0 10px 20px rgba(0,0,0,.2); color:#B6C8D3\9\0;color:#B6C8D3\0;   }
-.blue_large{ font-size:18px; color:#0a9cef;  padding-bottom:40px; text-align:center; }
-.error_img{ background:url(../images/error.png) no-repeat center; padding-left:64px; height:64px; width:64px; padding-top:10px;padding-bottom:10px}
-.btn_b_green{width:260px;
-	border:1px solid #27cb72;
-	background-color:#27cb72;
-	font-size:14px;
-	height:28px;
+	
+/*--------------------  btn  --------------------*/
+
+.btn_b_green{
+	width:260px;
+	border:1px solid #42A3DE;
+	background-color:#42A3DE;
+	font-size:16px;
+	height:45px;
 	color:#FFFFFF;
-	border-radius:10px;
+	border-radius:4px;
 	margin-bottom:40px;font-family: "微软雅黑" ,Arial, Helvetica, sans-serif;
 	
 }
+/*--------------------  error  --------------------*/
+.error{ border-bottom:1px solid #E9E9E9;  background-color:#fff; height:420px; width:70%;margin:0 auto; margin-top:10%; padding-top:40px;box-shadow: 0 10px 20px rgba(0,0,0,.1); }
+.h{font-size: 150px; color:#666; margin:10px 0;font-weight: 800;text-shadow: 0 1px 0 #d9d9d9, 0 2px 0 #d0d0d0, 0 5px 10px rgba(0,0,0,.125), 0 10px 20px rgba(0,0,0,.2); color:#B6C8D3\9\0;color:#B6C8D3\0;   }
+.blue_large{ font-size:16px; color:#0a9cef;  padding-bottom:40px; text-align:center; }
+/*  --------------------img -------------------- */
+.error_img{ background:url(../images/error.png) no-repeat center; padding-left:54px; height:44px; width:44px; padding-top:10px;padding-bottom:10px}
