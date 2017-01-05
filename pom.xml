@@ -7,7 +7,7 @@
 	<packaging>pom</packaging>
 
 	<description>
-		项目名为盖亚(大地之母), 为平台的基础项目，平台的所有基础设施工作
+		项目名为盖亚(大地之母), 为平台的基础项目，平台的所有基础设施工作 
 		在盖亚下面的子module中完成，比如web启动器，持久化器，公共库，工具库
 	</description>
 
