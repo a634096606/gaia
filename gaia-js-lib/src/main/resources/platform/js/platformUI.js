@@ -3,6 +3,36 @@ function UIContext(){
 	var me = this;
 	this.EXPORT_EXCEL_URL = contextPath + "/export/jqgrid"; 
 	
+	//jqgrid重设宽度(考虑其是否当前浏览器有滚动条)
+	this.resizeGridWidth = function(grid, minusWidth){
+		var width = window.innerWidth;
+	    if (width == null || width < 1){
+	        width = $(window).attr('offsetWidth');
+	    }
+	    // Fudge factor to prevent horizontal scrollbars
+	    width = width - minusWidth;
+	    if (width > 0 &&
+	        Math.abs(width - $(grid).width()) > 5)
+	    {
+	    	grid.setGridWidth(width);
+	    }
+	}
+	
+	//判断是否有横向或者竖向滚动条
+	this.hasScrolled = function(el, direction){
+		if(direction === "vertical") {
+	        return el.scrollHeight > el.clientHeight;
+	    }else if(direction === "horizontal") {
+	        return el.scrollWidth > el.clientWidth;
+	    }
+	}
+	
+	//jqgrid加载完成之后微调矫正其错误的宽度
+	this.fineTuneGridSize = function(grid, width){
+		if(me.hasScrolled($("html").get(0)), "vertical"){
+			me.resizeGridWidth(grid, width);
+		}
+	}
 	
 	//导出excel
 	this.exportGrid = function(gridId, sqlTemplate, fileName, extraParams){

@@ -228,13 +228,7 @@ public class UIWebResourceLoader implements ServletContextAware{
 	
 	//构建vue.js
 	private String buildVueResource(String contextPath) {
-		String js;
-		if(isCDN){
-			js = "<script type=\"text/javascript\" src=\"http://cdn.bootcss.com/vue/2.1.8/vue.runtime.common.js\"></script>";
-		}else{
-			js = "<script type=\"text/javascript\" src=\"" + contextPath + "/js-module/vue/vue.js\"></script>";
-		}
-		return js;
+		return "<script type=\"text/javascript\" src=\"" + contextPath + "/js-module/vue/vue.js\"></script>";
 	}
 	
 	//构建element-ui

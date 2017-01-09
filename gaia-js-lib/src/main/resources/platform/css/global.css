@@ -1,0 +1,21 @@
+@charset "utf-8";
+
+.tool-title{
+	font-weight:bold;
+	border-left:3px solid #1F2D3D;
+	text-align: center; 
+	font-size: 14px;
+	margin-top: 5px;
+	margin-bottom:5px;
+	width:100px;
+}
+  	
+.split-line{
+	margin-bottom:25px;
+	margin-top:10px;
+	border-bottom:1px solid #C0CCDA;
+}
+	
+.float-right{
+	float:right;
+}
