@@ -29,8 +29,8 @@ public class CommonController {
 		try {
 			urlObject = new URL(url);
 			conn = (HttpURLConnection)urlObject.openConnection();
-			conn.setConnectTimeout(200);
-			conn.setReadTimeout(200);
+			conn.setConnectTimeout(400);
+			conn.setReadTimeout(400);
 			conn.getResponseCode();
 		} catch (Exception e) {
 			result = "error";
