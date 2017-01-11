@@ -107,7 +107,7 @@ function UIContext(){
 				if(data.statusCode != null){
 					if(data.statusCode == 0){
 						if(options.message){
-							message({message:data.statusText, type:"success"});
+							options.message({message:data.statusText, type:"success"});
 						}else{
 							if(window.toastr){
 								toastr.success(data.statusText);
@@ -117,7 +117,7 @@ function UIContext(){
 						}	
 					}else{
 						if(options.message){
-							message({message:data.statusText, type:"error"});
+							options.message({message:data.statusText, type:"error"});
 						}else{
 							if(window.toastr){
 								toastr.error(data.statusText);
@@ -134,7 +134,7 @@ function UIContext(){
 			error:function(data, textStatus,jqXHR){
 				if(!(data.status == 200)){
 					if(options.message){
-						message({message: "服务器异常", type:"error"});
+						options.message({message: "服务器异常", type:"error"});
 					}else{
 						if(window.toastr){
 							toastr.error("服务器异常");
