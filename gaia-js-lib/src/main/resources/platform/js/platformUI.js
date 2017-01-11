@@ -106,9 +106,25 @@ function UIContext(){
 			success: function(data, textStatus,jqXHR){
 				if(data.statusCode != null){
 					if(data.statusCode == 0){
-						toastr.success(data.statusText);
+						if(options.message){
+							message({message:data.statusText, type:"success"});
+						}else{
+							if(window.toastr){
+								toastr.success(data.statusText);
+							}else{
+								Toast.success(data.statusText);
+							}
+						}	
 					}else{
-						toastr.error(data.statusText);
+						if(options.message){
+							message({message:data.statusText, type:"error"});
+						}else{
+							if(window.toastr){
+								toastr.error(data.statusText);
+							}else{
+								Toast.error(data.statusText);
+							}
+						}
 					}
 				}
 				if(options.afterOperation){
@@ -117,7 +133,15 @@ function UIContext(){
 			},
 			error:function(data, textStatus,jqXHR){
 				if(!(data.status == 200)){
-					toastr.error("服务器异常");
+					if(options.message){
+						message({message: "服务器异常", type:"error"});
+					}else{
+						if(window.toastr){
+							toastr.error("服务器异常");
+						}else{
+							Toast.error("服务器异常");
+						}
+					}
 				}
 				if(options.afterOperation){
 					options.afterOperation(data, textStatus,jqXHR);
