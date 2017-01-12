@@ -151,25 +151,6 @@ function UIContext(){
 		$.ajax(ajaxOptions);
 	}
 	
-	//判断表单是否合法
-	this.formIsValid = function(formId){
-		var flag = true;
-		$("#" + formId).find(".easyui-validatebox").each(function(index, e){
-			if(!$(e).validatebox("isValid")){
-				flag = $(e).validatebox("isValid");
-				return false;
-			}
-		});
-		return flag;
-	}
-	
-	//对表单开启验证
-	this.validateForm = function(formId){
-		$("#" + formId).find(".easyui-validatebox").each(function(index, e){
-			$(e).validatebox("validate");
-		});
-	}
-	
 	//列表刷新
 	this.refreshGrid = function(grid, options){
 		var defaultSortName = grid.jqGrid('getGridParam','sortname');
@@ -384,6 +365,22 @@ function UIContext(){
 			}else{
 				return false;
 			}
+		}
+		this.isURL = function(url){
+			var protocols = '((https?|s?ftp|irc[6s]?|git|afp|telnet|smb):\\/\\/)+'
+			   , userInfo = '([a-z0-9]\\w*(\\:[\\S]+)?\\@)?'
+			   , domain = '([a-z0-9]([\\w]*[a-z0-9])*\\.)?[a-z0-9]\\w*\\.[a-z]{2,}(\\.[a-z]{2,})?'
+			   , port = '(:\\d{1,5})?'
+			   , ip = '\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}'
+			   , address = '(\\/\\S*)?'
+			   , domainType = [protocols, userInfo, domain, port, address]
+			   , ipType = [protocols, userInfo, ip, port, address]
+			   , validate
+		
+			validate = function(type){
+				return new RegExp('^' + type.join('') + '$', 'i').test(url);
+			};
+		  	return validate(domainType) || validate(ipType);
 		}
 	}
 	

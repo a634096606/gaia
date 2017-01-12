@@ -3880,7 +3880,7 @@
     top: 0;
     left: 0;
     position: absolute;
-    border-radius: 0%;
+    border-radius: 50%;
     transition: transform .3s;
     width: 16px;
     height: 16px;
@@ -4806,7 +4806,7 @@
 }
 .el-dialog__title {
     line-height: 1;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 700;
     color: #1f2d3d;
 }
