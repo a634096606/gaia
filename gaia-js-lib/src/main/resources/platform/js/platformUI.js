@@ -372,15 +372,16 @@ function UIContext(){
 			   , domain = '([a-z0-9]([\\w]*[a-z0-9])*\\.)?[a-z0-9]\\w*\\.[a-z]{2,}(\\.[a-z]{2,})?'
 			   , port = '(:\\d{1,5})?'
 			   , ip = '\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}'
+			   , localhost = '(localhost)'
 			   , address = '(\\/\\S*)?'
+			   , localhostType = [protocols, localhost, port, address]
 			   , domainType = [protocols, userInfo, domain, port, address]
 			   , ipType = [protocols, userInfo, ip, port, address]
 			   , validate
-		
 			validate = function(type){
 				return new RegExp('^' + type.join('') + '$', 'i').test(url);
 			};
-		  	return validate(domainType) || validate(ipType);
+		  	return validate(domainType) || validate(ipType) || validate(localhostType);
 		}
 	}
 	
