@@ -19,3 +19,11 @@
 .float-right{
 	float:right;
 }
+
+.grid-column-checkbox{
+	display:inline-block;
+	min-width: 158px;
+	padding: 8px 6px;
+	white-space: nowrap;
+	float: left !important;
+}
