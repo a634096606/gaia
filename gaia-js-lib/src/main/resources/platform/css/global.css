@@ -27,3 +27,22 @@
 	white-space: nowrap;
 	float: left !important;
 }
+
+.color-red{
+	color:red;
+}
+
+.color-green{
+	color:green;
+}
+
+.combotree{
+	width:187px;
+	position:absolute;
+	background:white;
+	z-index:9999;
+	border:1px solid #d1dbe5;
+	border-radius: 2px;
+	height:200px;
+	overflow:auto;
+}
