@@ -210,35 +210,75 @@ function UIContext(){
 		}
 	}
 	
-	//根据父级码值加载码表形成comboTree
-	this.loadSystemCodeToComboTreeByParentCode = function(inputId, parentCode, options){
-		var defaultOptions = {
-			url: contextPath + "/code/children/code",
-		    method:"get",
-		    required: true,
-		    queryParams:{code: parentCode},
-		    loadFilter: function(data){
-		    	return me.formatEasyUITreeData(data);//格式化数据
-		    }
+	//初始化zTree
+	this.initTree = function(inputId, setting, ajaxOption){
+		var tree;
+		var defaultSetting = {
+			data: {
+				simpleData: {
+					enable: true
+				}
+			},
+			check: {
+				enable: false
+			}
 		};
-		var allOptions = $.extend(true, defaultOptions, options);
-		var combotree =  $("#" + inputId).combotree(allOptions);
-		return combotree;
+		$.extend(true, defaultSetting, setting);
+		me.ajax({
+			url: ajaxOption.url,
+			data: ajaxOption.data,
+			async: false,
+			afterOperation: function(data, textStatus,jqXHR){
+				//初始化权限树
+				tree = $.fn.zTree.init($("#" + inputId), defaultSetting, data);
+			}
+		});
+		return tree;
+	}
+	
+	//根据父级码值加载码表形成comboTree
+	this.loadSystemCodeToComboTreeByParentCode = function(inputId, parentCode, treeOptions){
+		return me.initTree(inputId, treeOptions, {
+			url: contextPath + "/code/children/code",
+			data: {code: parentCode}
+		});
 	}
 	
 	//根据父级id加载码表形成comboTree
-	this.loadSystemCodeToComboTreeByParentId = function(inputId, parentId, options){
-		var defaultOptions = {
-			required: true,
-			url: contextPath + "/code/children/" + parentId,
-		    method:"get",
-		    loadFilter: function(data){
-		    	return me.formatEasyUITreeData(data);//格式化数据
-		    }
-		};
-		var allOptions = $.extend(true, defaultOptions, options);
-		var combotree =  $("#" + inputId).combotree(allOptions);
-		return combotree;
+	this.loadSystemCodeToComboTreeByParentId = function(inputId, parentId, treeOptions){
+		return me.initTree(inputId, treeOptions, {
+			url: contextPath + "/code/children/" + parentId
+		});
+	}
+	
+	//根据父级id加载所有子组织机构
+	this.loadOrgToComboTreeByParentId = function(inputId, parentId, treeOptions){
+		return me.initTree(inputId, treeOptions, {
+			url: contextPath + "/org/children/" + parentId
+		});
+	}
+	
+	//根据父级的组织机构类型(码值)加载所有子组织机构
+	this.loadOrgToComboTreeByParentType = function(inputId, parentTypeCode, treeOptions){
+		return me.initTree(inputId, treeOptions, {
+			url: contextPath + "/org/children/code",
+			data: {typeCode: parentTypeCode}
+		});
+	}
+	
+	//根据组织机构类型加载所有组织机构
+	this.loadOrgToComboTreeByType = function(inputId, typeCode, treeOptions){
+		return me.initTree(inputId, treeOptions, {
+			url: contextPath + "/org/list/code",
+			data: {typeCode: typeCode}
+		});
+	}
+	
+	//加载所有组织机构
+	this.loadAllOrgToComboTree = function(inputId, treeOptions){
+		return me.initTree(inputId, treeOptions, {
+			url: contextPath + "/org/tree/all"
+		});
 	}
 	
 	//通过ztreeAPI对数据进行格式化
@@ -278,82 +318,48 @@ function UIContext(){
 	}
 	
 	//根据行政区划id加载所有的子行政区划数据
-	this.loadRegionByParentId = function(inputId, parentId, options){
-		var defaultOptions = {
-			required: false,
+	this.loadRegionByParentId = function(parentId, options){
+		var result;
+		var defaultOption = {
 			url: contextPath + "/region/parent/" + parentId,
-			valueField:'id',
-			textField:'codeName'
+			async: false,
+			afterOperation: function(data){
+				result = data;
+			}
 		};
-		var combobox =  $("#" + inputId).combobox($.extend(true, defaultOptions, options));
-		return combobox;			
-	}
-	
-	
-	//根据父级id加载所有子组织机构
-	this.loadOrgToComboTreeByParentId = function(inputId, parentId, options){
-		var defaultOptions = {
-			required: true,
-			url: contextPath + "/org/children/" + parentId,
-		    method:"get",
-		    loadFilter: function(data){
-		    	return me.formatEasyUITreeData(data);//格式化数据
-		    }
-		};
-		var combotree =  $("#" + inputId).combotree($.extend(true, defaultOptions, options));
-		return combotree;
-	}
-	
-	//根据父级的组织机构类型(码值)加载所有子组织机构
-	this.loadOrgToComboTreeByParentType = function(inputId, parentTypeCode, options){
-		var defaultOptions = {
-			required: true,
-			url: contextPath + "/org/children/code",
-		    method:"get",
-		    queryParams:{typeCode: parentTypeCode},
-		    loadFilter: function(data){
-		    	return me.formatEasyUITreeData(data);//格式化数据
-		    }
-		};
-		var combotree =  $("#" + inputId).combotree($.extend(true, defaultOptions, options));
-		return combotree;
-	}
-	
-	//根据组织机构类型加载所有组织机构
-	this.loadOrgToComboTreeByType = function(inputId, typeCode, options){
-		var defaultOptions = {
-			required: true,
-			url: contextPath + "/org/list/code",
-		    method:"get",
-		    queryParams:{typeCode: typeCode},
-		    loadFilter: function(data){
-		    	return me.formatEasyUITreeData(data);//格式化数据
-		    }
-		};
-		var combotree =  $("#" + inputId).combotree($.extend(true, defaultOptions, options));
-		return combotree;
+		$.extend(true, defaultOption, options);
+		me.ajax(defaultOption);
+		return result;
 	}
 	
 	//加载系统所有人员
-	this.loadAllSystemPerson = function(inputId, options){
-		var defaultOptions = {
-			required: false,
+	this.loadAllSystemPerson = function(options){
+		var result;
+		var defaultOption = {
 			url: contextPath + "/person/list/all",
-		   	valueField:'id',
-		   	textField:'personName'
+			async: false,
+			afterOperation: function(data){
+				result = data;
+			}
 		};
-		return $("#" + inputId).combobox($.extend(true, defaultOptions, options));
+		$.extend(true, defaultOption, options);
+		me.ajax(defaultOption);
+		return result;
 	}
 	
 	//加载系统所有用户
-	this.loadAllUser = function(inputId, options){
-		var defaultOptions = {
-			required: false,
+	this.loadAllUser = function(options){
+		var result;
+		var defaultOption = {
 			url: contextPath + "/user/list/all",
-		   	valueField:'id',
-		   	textField:'userName'
+			async: false,
+			afterOperation: function(data){
+				result = data;
+			}
 		};
-		return $("#" + inputId).combobox($.extend(true, defaultOptions, options));
+		$.extend(true, defaultOption, options);
+		me.ajax(defaultOption);
+		return result;
 	}
 	
 	//工具类
