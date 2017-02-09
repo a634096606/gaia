@@ -20,7 +20,7 @@ Date.prototype.format = function (format) {
     return format;   
 }   
 
-function date(){
+function extendDate(){
 	/**    
 	*转换日期对象为日期字符串    
 	* @param date 日期对象    
@@ -89,4 +89,4 @@ function date(){
 	}
 } 
 
-var ExtendDate = new date();
+var ExtendDate = new extendDate();

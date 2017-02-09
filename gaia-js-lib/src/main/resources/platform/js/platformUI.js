@@ -432,6 +432,14 @@ function UIContext(){
 		}
 	};
 	
+	this.message = function(options){
+		if(parent.message){
+			parent.message(options);
+		}else{
+			vue.$message(options);
+		}
+	}
+	
 	//map的JS实现
 	this.map = function(){
 		var map = {
