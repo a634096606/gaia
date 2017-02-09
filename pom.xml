@@ -300,5 +300,6 @@
 		<module>gaia-jar-build</module>
 		<module>gaia-war-build</module>
 		<module>gaia-dubbo-extend</module>
+		<module>gaia-infrastructure</module>
 	</modules>
 </project>
