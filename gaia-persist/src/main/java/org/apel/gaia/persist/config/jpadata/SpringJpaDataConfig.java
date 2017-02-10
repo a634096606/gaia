@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @Configuration
-@EnableJpaRepositories(basePackages = "org.apel.**.dao", 
+@EnableJpaRepositories(basePackages = {"org.**.dao", "com.**.dao"}, 
 							repositoryBaseClass = CommonRepositoryImpl.class)
 public class SpringJpaDataConfig {
 	
