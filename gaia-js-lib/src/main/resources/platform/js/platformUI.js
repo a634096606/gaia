@@ -98,6 +98,27 @@ function UIContext(){
 	    $(form).submit();
 	}
 	
+	//隐藏表单提交
+	this.simulateSubmitForm = function (action, params, type, isMultipart){
+		if(!type){
+			type = "get";
+		}
+		var form = $(document.createElement('form')).attr('action', action)
+					.attr('method', type).css("display", "none");
+		if(isMultipart){
+			form.attr("enctype", "multipart/form-data");
+		}
+	    $('body').append(form);
+	    for(var attr in params){
+	    	var key = attr, value = params[attr];
+	    	if(value != "" && !(value instanceof Object)){
+			 	$(document.createElement('input')).attr('type', 'hidden').attr('name', key).attr('value', value).appendTo(form);
+			}
+	    }
+	    $(form).submit();
+	    form.remove();
+	}
+	
 	//ajax方法
 	this.ajax = function(options){
 		var ajaxOptions = $.extend(true, {
