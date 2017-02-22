@@ -12,5 +12,5 @@ public interface CommonConsist {
 	static final String CURRENT_USER_NAME = "currentUserName";
 	static final String CURRENT_USER_LOGO = "currentUserLogo";
 	static final String APP_CONTEXT_PATH = "appContextPath";
-	final static String ALL_FUNCTION_MENUS = "all_function_menus";
+	final static String ALL_LINKABLE_MENUS = "all_linkable_menus";
 }
