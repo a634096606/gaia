@@ -29,7 +29,7 @@ function UIContext(){
 	
 	//jqgrid加载完成之后微调矫正其错误的宽度
 	this.fineTuneGridSize = function(grid, width){
-		if(me.hasScrolled($("html").get(0)), "vertical"){
+		if(true){//暂行
 			me.resizeGridWidth(grid, width);
 		}
 	}
