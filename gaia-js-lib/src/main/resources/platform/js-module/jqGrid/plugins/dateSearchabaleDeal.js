@@ -36,6 +36,8 @@ function FieldtypeAddtioner(searchList){
 				if((col.formatter=="date"||col.cusType == "date")
 						&& col.index == this.field){
 					cusType = "date";
+				}else if(col.index == this.field && col.cusType){
+					cusType = col.cusType;			
 				}
 			}
 			this.cusType = cusType;
