@@ -68,6 +68,15 @@ public class Condition implements Serializable {
 		this.operation = operation;
 	}
 	
+	public Condition(RelateType relateType, String propertyName,
+			Object propertyValue, Operation operation, String propertyType) {
+		this.relateType = relateType;
+		this.propertyName = propertyName;
+		this.propertyValue = propertyValue;
+		this.operation = operation;
+		this.propertyType = propertyType;
+	}
+	
 	public Condition(boolean isPrefixBrackets,RelateType relateType, String propertyName,
 			Object propertyValue, Operation operation) {
 		this.relateType = relateType;

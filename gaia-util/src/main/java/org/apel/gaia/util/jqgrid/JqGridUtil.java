@@ -168,7 +168,7 @@ public class JqGridUtil {
 				//根据rule本身的数据创建condition对象
 				Condition condition = new Condition(outterRelateType, ruleItem
 						.getField(), ruleItem.getData(), map
-						.get(ruleItem.getOp().toLowerCase()));
+						.get(ruleItem.getOp().toLowerCase()), ruleItem.getCusType());
 				if(i==0){//当为第一个rule时，需要添加前括号
 					firstCondition=condition;
 					condition.setPrefixBrackets(true);
