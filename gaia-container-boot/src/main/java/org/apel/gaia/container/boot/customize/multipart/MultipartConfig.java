@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 @Configuration
@@ -16,7 +17,7 @@ public class MultipartConfig {
 	private ApplicationContext context;
 
 	@Bean
-	public CommonsMultipartResolver multipartResolver(){
+	public MultipartResolver multipartResolver(){
 		Map<String, CommonsMultipartResolver> commonsMultipartResolvers = context.getBeansOfType(CommonsMultipartResolver.class);
 		if(commonsMultipartResolvers.size() > 1){
 			throw new RuntimeException("spring容器中找到两个及以上的CommonsMultipartResolver, 请检查配置情况");

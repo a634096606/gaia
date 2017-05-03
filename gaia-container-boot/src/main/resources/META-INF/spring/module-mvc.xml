@@ -12,9 +12,6 @@
            http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
 	
 	<!-- spring mvc -->
-    <mvc:annotation-driven />
-	<mvc:resources mapping="/**" location="classpath:/platform/,classpath:/static/,/"/>
-	
 	<mvc:interceptors>  
         <!-- 多个拦截器,顺序执行 -->  
         <mvc:interceptor>
