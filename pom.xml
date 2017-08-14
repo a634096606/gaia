@@ -301,5 +301,8 @@
 		<module>gaia-war-build</module>
 		<module>gaia-dubbo-extend</module>
 		<module>gaia-infrastructure</module>
+		<module>gaia-bootstrap</module>
+		<module>gaia-storage</module>
+		<module>gaia-app-boot</module>
 	</modules>
 </project>

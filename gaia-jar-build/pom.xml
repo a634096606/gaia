@@ -28,7 +28,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.apel</groupId>
-			<artifactId>test-web-designer</artifactId>
+			<artifactId>wechat</artifactId>
 			<version>1.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
