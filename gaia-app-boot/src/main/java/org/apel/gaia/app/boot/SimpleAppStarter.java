@@ -9,7 +9,7 @@ import org.springframework.context.annotation.ImportResource;
 
 /**
  * @author lijian
- * 系统平台启动器--不包含security的配置
+ * 应用启动器--不包含security的配置
  *
  */
 @EnableAutoConfiguration(exclude={MultipartAutoConfiguration.class, SecurityAutoConfiguration.class})
