@@ -9,6 +9,11 @@
 	<artifactId>gaia-app-infrastructure</artifactId>
 	
 	<dependencies>
-		
+
+	<dependency>
+		<groupId>org.apel</groupId>
+		<artifactId>gaia-storage</artifactId>
+		<version>1.0.1-SNAPSHOT</version>
+	</dependency>
 	</dependencies>
 </project>
