@@ -23,7 +23,7 @@ public class MybatisConfig {
 		mapperScannerConfigurer.getMapperHelper().setConfig(config);
 		mapperScannerConfigurer.setBasePackage(MybatisConfig.MYBATIS_SCAN_PACKAGE);
 		Properties prop = new Properties();
-		prop.put("mappers", "tk.mybatis.mapper.common.Mapper");
+		prop.put("mappers", "org.apel.gaia.storage.general.CustomPageMapper");
 		mapperScannerConfigurer.setProperties(prop);
 		return  mapperScannerConfigurer;
 	}

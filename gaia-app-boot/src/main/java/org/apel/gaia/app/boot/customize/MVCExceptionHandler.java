@@ -45,6 +45,8 @@ public class MVCExceptionHandler implements HandlerExceptionResolver {
 
 	private void sendError(HttpServletResponse response, String msg)
 			throws JsonProcessingException, IOException {
+		response.setCharacterEncoding("UTF-8");
+		response.setContentType("application/json");
 		Message message = new Message(500, msg);
 		String info = objectMapper.writeValueAsString(message);
 		PrintWriter writer = response.getWriter();  
