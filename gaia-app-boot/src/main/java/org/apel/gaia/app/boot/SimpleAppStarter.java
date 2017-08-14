@@ -1,4 +1,4 @@
-package org.apel.app.boot;
+package org.apel.gaia.app.boot;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;

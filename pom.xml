@@ -304,5 +304,6 @@
 		<module>gaia-bootstrap</module>
 		<module>gaia-storage</module>
 		<module>gaia-app-boot</module>
+		<module>gaia-app-infrastructure</module>
 	</modules>
 </project>

@@ -1,4 +1,4 @@
-package org.apel.app.boot.i18n;
+package org.apel.gaia.app.boot.i18n;
 
 import org.apel.gaia.commons.i18n.MessageUtil;
 import org.springframework.context.MessageSource;
