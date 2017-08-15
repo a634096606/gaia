@@ -1,5 +1,8 @@
 package org.apel.gaia.storage.util;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -22,6 +25,7 @@ public class SQLUtil {
 	 * @param values
 	 * @return
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static String parseCondition(List<Condition> conditions,
 			Map<String, Object> values){
  		StringBuffer c = new StringBuffer();
@@ -57,18 +61,19 @@ public class SQLUtil {
 				switch (operation) {
 				case NC:
 				case CN:
-					c.append(related + propertyName + operation + "%#{" + propertyName + "}%");
-					values.put(propertyName, value);
+					
+					c.append(related + propertyName + operation + "concat('%',#{" + propertyName + "_" + count + "},'%')");
+					values.put(propertyName + "_" + count, value);
 					break;
 				case BN:
 				case BW:
-					c.append(related + propertyName + operation + "#{" + propertyName + "}%");
-					values.put(propertyName, value);
+					c.append(related + propertyName + operation + "concat('',#{" + propertyName + "_" + count + "},'%')");
+					values.put(propertyName + "_" + count, value);
 					break;
 				case EN:
 				case EW:
-					c.append(related + propertyName + operation + "%#{" + propertyName + "}");
-					values.put(propertyName, value);
+					c.append(related + propertyName + operation + "concat('',#{" + propertyName + "_" + count + "},'')");
+					values.put(propertyName + "_" + count, value);
 					break;
 				case BETWEEN:
 					Object[] params = new Object[2];
@@ -79,17 +84,37 @@ public class SQLUtil {
 					} else {
 						params = (Object[]) value;
 					}
-					c.append(related + propertyName + operation + "#{" + propertyName + "0}" + " AND "
+					c.append(related + propertyName + operation + "#{" + propertyName + "0_" + count + "}" + " AND "
 							+ "#{" + propertyName + "1}");
-					values.put(propertyName + "0", params[0]);
-					values.put(propertyName + "1", params[1]);
+					values.put(propertyName + "0" + "_" + count, params[0]);
+					values.put(propertyName + "1" + "_" + count, params[1]);
 					break;
 				case NI:
 				case IN:
-					String inClause = "<foreach item=\"item" + count + "\" collection=\"" + propertyName + "\" separator=\",\" open=\"(\" close=\")\">"
+					Collection<Object> inListValue = new ArrayList<>();
+					if ( value != null){
+						Class<?> clazz = value.getClass();
+						if (value instanceof String){
+							String[] split = ((String) value).split(",");
+							for (String sv : split) {
+								inListValue.add(sv);
+							}
+							inListValue.addAll(Arrays.asList(split));
+						}else if (clazz.isArray()){
+							Object[] array = (Object[])value;
+							for (Object ov : array) {
+								inListValue.add(ov);
+							}
+						}else if (value instanceof Collection){
+							inListValue = (Collection)value;
+						}
+					}else{
+						inListValue.add("NULL");
+					}
+					String inClause = "<foreach item=\"item" + count + "\" collection=\"" + propertyName + "_" + count + "\" separator=\",\" open=\"(\" close=\")\">"
 						+ "#{item" + count + "}</foreach>";
 					c.append(related + propertyName + operation + inClause);
-					values.put(propertyName, value);
+					values.put(propertyName + "_" + count, inListValue);
 					break;
 				case EQ:
 				case GE:
@@ -97,8 +122,8 @@ public class SQLUtil {
 				case LE:
 				case LT:
 				case NE:
-					c.append(related + propertyName + operation + "#{" + propertyName + "}");
-					values.put(propertyName, value);
+					c.append(related + propertyName + operation + "#{" + propertyName + "_" + count + "}");
+					values.put(propertyName + "_" + count, value);
 					break;
 				case NN:
 				case NU:
@@ -125,7 +150,7 @@ public class SQLUtil {
 		for (Order order : orders) {
 			String propertyName = order.getPropertyName();
 			OrderType orderType = order.getOrderType();
-			c.append("#{" + propertyName + "} " + orderType + ",");
+			c.append(propertyName + " " + orderType + ",");
 		}
 		if (orders.size() > 0) {
 			c.replace(c.length() - 1, c.length(), "");

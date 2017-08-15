@@ -162,9 +162,7 @@ public class AbstractBizCommonService <T,PK extends Serializable> implements Biz
 
 	@Override
 	public void pageFindByCondition(PageBean pageBean) {
-		List<Condition> conditions = pageBean.getConditions();
-		List<Order> orders = pageBean.getOrders();
-		Map<String, Object> values = convertConditions(conditions, orders);
+		Map<String, Object> values = convertConditions(pageBean);
 		//根据pagbean中的分页条件调用分页插件进行分页
 		PageHelper.startPage(pageBean.getCurrentPage(), pageBean.getRowsPerPage());
 		PageInfo<T> page = new PageInfo<>(mapper.pageByCondition(values));
@@ -173,8 +171,9 @@ public class AbstractBizCommonService <T,PK extends Serializable> implements Biz
 	}
 	
 	//转换pagebean中设置的条件
-	private Map<String, Object> convertConditions(List<Condition> conditions,
-			List<Order> orders) {
+	protected Map<String, Object> convertConditions(PageBean pageBean) {
+		List<Condition> conditions = pageBean.getConditions();
+		List<Order> orders = pageBean.getOrders();
 		Map<String, Object> values = new HashMap<>();
 		//解析pagebean where条件
 		String conditionSql = SQLUtil.parseCondition(conditions, values);
