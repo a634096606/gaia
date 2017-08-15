@@ -1,8 +1,7 @@
 package org.apel.gaia.storage.util;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +24,7 @@ public class SQLUtil {
 	 * @param values
 	 * @return
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({"rawtypes" })
 	public static String parseCondition(List<Condition> conditions,
 			Map<String, Object> values){
  		StringBuffer c = new StringBuffer();
@@ -72,7 +71,7 @@ public class SQLUtil {
 					break;
 				case EN:
 				case EW:
-					c.append(related + propertyName + operation + "concat('',#{" + propertyName + "_" + count + "},'')");
+					c.append(related + propertyName + operation + "concat('%',#{" + propertyName + "_" + count + "},'')");
 					values.put(propertyName + "_" + count, value);
 					break;
 				case BETWEEN:
@@ -91,30 +90,45 @@ public class SQLUtil {
 					break;
 				case NI:
 				case IN:
-					Collection<Object> inListValue = new ArrayList<>();
+					StringBuffer inClauseSb = new StringBuffer("(");
 					if ( value != null){
 						Class<?> clazz = value.getClass();
 						if (value instanceof String){
 							String[] split = ((String) value).split(",");
 							for (String sv : split) {
-								inListValue.add(sv);
+								inClauseSb.append("'" + sv + "',");
 							}
-							inListValue.addAll(Arrays.asList(split));
 						}else if (clazz.isArray()){
 							Object[] array = (Object[])value;
 							for (Object ov : array) {
-								inListValue.add(ov);
+								if (ov instanceof String || ov instanceof Date){
+									inClauseSb.append(ov + ",");
+								}else{
+									inClauseSb.append("'" + ov.toString() + "',");
+								}
 							}
 						}else if (value instanceof Collection){
-							inListValue = (Collection)value;
+							Collection valueList = (Collection)value;
+							for (Object ov : valueList) {
+								if (ov instanceof String || ov instanceof Date){
+									inClauseSb.append("'" + ov.toString() + "',");
+								}else{
+									inClauseSb.append(ov + ",");
+								}
+							}
+						}else{
+							inClauseSb.append("'" + value + "',");
 						}
 					}else{
-						inListValue.add("NULL");
+						inClauseSb.append("NULL");
 					}
-					String inClause = "<foreach item=\"item" + count + "\" collection=\"" + propertyName + "_" + count + "\" separator=\",\" open=\"(\" close=\")\">"
-						+ "#{item" + count + "}</foreach>";
+					String inClause = "";
+					if (inClauseSb.length() > 1){
+						inClause = inClauseSb.substring(0, inClauseSb.length() - 1) + ")";
+					}else{
+						inClause = inClauseSb.append(")").toString(); 
+					}
 					c.append(related + propertyName + operation + inClause);
-					values.put(propertyName + "_" + count, inListValue);
 					break;
 				case EQ:
 				case GE:
