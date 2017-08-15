@@ -10,16 +10,16 @@ import java.util.Properties;
 import javax.sql.DataSource;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apel.gaia.storage.factory.DataSourceFactory;
 import org.apel.gaia.util.encryption.DESUtil;
 import org.apel.gaia.util.encryption.MD5Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.alibaba.druid.pool.DruidDataSource;
-import com.dangdang.ddframe.rdb.sharding.jdbc.core.datasource.ShardingDataSource;
 
 /**
  * @author lijian
@@ -50,6 +50,9 @@ public class DBConfig {
 	
 	//druid datasource
 	private DruidDataSource dataSource;
+	
+	@Autowired(required = false)
+	private DataSourceFactory dataSourceFactory;
 	
 	static{
 		try {
@@ -85,9 +88,11 @@ public class DBConfig {
 	/**
 	 * 配置druid datasource
 	 */
-	@Bean(initMethod = "init", destroyMethod = "close")
-	@ConditionalOnMissingBean(ShardingDataSource.class)
+	@Bean
 	public DataSource dataSource() throws Exception{
+		if (dataSourceFactory != null){
+			return dataSourceFactory.createDataSource();
+		}
 		buildDs(props);
 		return dataSource;
 	}
