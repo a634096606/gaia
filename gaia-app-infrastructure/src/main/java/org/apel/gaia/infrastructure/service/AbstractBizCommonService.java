@@ -1,21 +1,29 @@
 package org.apel.gaia.infrastructure.service;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.RowBounds;
+import org.apel.gaia.commons.pager.Condition;
+import org.apel.gaia.commons.pager.Order;
 import org.apel.gaia.commons.pager.PageBean;
+import org.apel.gaia.storage.general.CustomPageMapper;
+import org.apel.gaia.storage.util.SQLUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import tk.mybatis.mapper.common.Mapper;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 
 @Component
 public class AbstractBizCommonService <T,PK extends Serializable> implements BizCommonService<T, PK>{
 
 	@Autowired
-	protected Mapper<T> mapper;
+	protected CustomPageMapper<T> mapper;
 	
 	@Transactional
 	@Override
@@ -154,14 +162,36 @@ public class AbstractBizCommonService <T,PK extends Serializable> implements Biz
 
 	@Override
 	public void pageFindByCondition(PageBean pageBean) {
-		// TODO Auto-generated method stub
-		
+		List<Condition> conditions = pageBean.getConditions();
+		List<Order> orders = pageBean.getOrders();
+		Map<String, Object> values = convertConditions(conditions, orders);
+		//根据pagbean中的分页条件调用分页插件进行分页
+		PageHelper.startPage(pageBean.getCurrentPage(), pageBean.getRowsPerPage());
+		PageInfo<T> page = new PageInfo<>(mapper.pageByCondition(values));
+		pageBean.setItems(page.getList());
+		pageBean.setTotalRows(Integer.valueOf(String.valueOf(page.getTotal())));
 	}
-
-	@Override
-	public void pageFindByConditionWithCount(PageBean pageBean) {
-		// TODO Auto-generated method stub
-		
+	
+	//转换pagebean中设置的条件
+	private Map<String, Object> convertConditions(List<Condition> conditions,
+			List<Order> orders) {
+		Map<String, Object> values = new HashMap<>();
+		//解析pagebean where条件
+		String conditionSql = SQLUtil.parseCondition(conditions, values);
+		//解析pagebean order条件
+		String orderSql = SQLUtil.parseOrder(orders);
+		//添加到mybatis参数集合中
+		if (StringUtils.isEmpty(conditionSql)){
+			values.put("conditions", null);
+		}else{
+			values.put("conditions", conditionSql);
+		}
+		if (StringUtils.isEmpty(orderSql)){
+			values.put("orders", null);
+		}else{
+			values.put("orders", orderSql);
+		}
+		return values;
 	}
 
 

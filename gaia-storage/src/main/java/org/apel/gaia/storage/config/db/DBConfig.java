@@ -14,10 +14,12 @@ import org.apel.gaia.util.encryption.DESUtil;
 import org.apel.gaia.util.encryption.MD5Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.alibaba.druid.pool.DruidDataSource;
+import com.dangdang.ddframe.rdb.sharding.jdbc.core.datasource.ShardingDataSource;
 
 /**
  * @author lijian
@@ -84,6 +86,7 @@ public class DBConfig {
 	 * 配置druid datasource
 	 */
 	@Bean(initMethod = "init", destroyMethod = "close")
+	@ConditionalOnMissingBean(ShardingDataSource.class)
 	public DataSource dataSource() throws Exception{
 		buildDs(props);
 		return dataSource;

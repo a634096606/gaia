@@ -11,6 +11,6 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE})
 public @interface Sql {
 
-	String value();
-	
+	String value() default "";
+	String resultMap() default "";
 }

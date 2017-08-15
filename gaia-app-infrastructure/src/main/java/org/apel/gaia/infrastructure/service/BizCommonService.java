@@ -147,9 +147,6 @@ public interface BizCommonService<T,PK extends Serializable> {
      */
 	void pageFindByEntity(T record, PageBean pageBean);
 	
-	void pageFindByCondition(PageBean pageBean);
-	
-	void pageFindByConditionWithCount(PageBean pageBean);
 	
 	/**
      * 根据实体属性和pageBean进行分页查询(会统计查询总数)，此方法当中不会利用pageBean的Condition条件
@@ -159,6 +156,14 @@ public interface BizCommonService<T,PK extends Serializable> {
      * @return
      */
 	void pageFindByEntityWithCount(T record, PageBean pageBean);
+	
+	/**
+     * 根据pageBean condition进行分页查询(会统计查询总数)
+     *
+     * @param pageBean
+     * @return
+     */
+	void pageFindByCondition(PageBean pageBean);
 	
 	/**
      * 根据主键字段进行查询，方法参数必须包含完整的主键属性，查询条件使用等号
