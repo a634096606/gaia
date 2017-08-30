@@ -22,7 +22,7 @@ import com.github.pagehelper.PageInfo;
 @Component
 public class AbstractBizCommonService <T,PK extends Serializable> implements BizCommonService<T, PK>{
 
-	@Autowired
+	@Autowired(required = false)
 	protected CustomPageMapper<T> mapper;
 	
 	@Transactional
