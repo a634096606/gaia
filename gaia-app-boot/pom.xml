@@ -7,11 +7,15 @@
 		<version>1.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>gaia-app-boot</artifactId>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aspects</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apel</groupId>
