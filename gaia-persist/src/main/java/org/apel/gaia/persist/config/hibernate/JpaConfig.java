@@ -18,6 +18,8 @@ public class JpaConfig{
 	
 	@Autowired
 	DataSource dataSource;
+	@Autowired
+	private HibernatePropertiesConfig hibernatePropertiesConfig;
 	
 	public JpaVendorAdapter jpaVendorAdapter(){
 		HibernateJpaVendorAdapter hibernateJpaVendorAdapter = new HibernateJpaVendorAdapter();
@@ -33,7 +35,7 @@ public class JpaConfig{
 		entityManagerFactoryBean.setDataSource(dataSource);
 		entityManagerFactoryBean.setPackagesToScan(new String[] {"org.**.domain", "com.**.domain"});
 		entityManagerFactoryBean.setPersistenceUnitPostProcessors(new PlatformPersistenceUnitPostProcessor(persistenceUnitName));
-		Map<String, String> jpaPropertyMap = HibernatePropertiesConfig.hibernateProperties();
+		Map<String, String> jpaPropertyMap = hibernatePropertiesConfig.hibernateProperties();
 		entityManagerFactoryBean.setJpaPropertyMap(jpaPropertyMap);
 		entityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter());
 		entityManagerFactoryBean.afterPropertiesSet();

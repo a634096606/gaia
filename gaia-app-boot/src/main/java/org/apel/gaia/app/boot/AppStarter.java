@@ -28,7 +28,7 @@ public class AppStarter {
 		return context;
 	}
 	
-	public static void startByBlocking(ContextStartedCallback contextStartedCallback, String... args) throws Exception{
+	public static void startWithBlocking(ContextStartedCallback contextStartedCallback, String... args) throws Exception{
 		CountDownLatch cdl = new CountDownLatch(1);
 		ConfigurableApplicationContext context = SpringApplication.run(AppStarter.class, args);
 		if (contextStartedCallback != null) {
@@ -38,8 +38,8 @@ public class AppStarter {
 		cdl.await();
 	}
 	
-	public static void startByBlocking(String... args) throws Exception{
-		startByBlocking(null, args);
+	public static void startWithBlocking(String... args) throws Exception{
+		startWithBlocking(null, args);
 	}
 	
 	public interface ContextStartedCallback{
