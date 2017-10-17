@@ -23,7 +23,7 @@ public class EmbeddedServletContainerCustomizerBean implements
 		container.addErrorPages(new ErrorPage(HttpStatus.BAD_REQUEST, "/400"));
 		container.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND, "/404"));
 		container.addErrorPages(new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/500"));
-		container.setSessionTimeout((int)TimeUnit.HOURS.toSeconds(8));//session八小时过期
+		container.setSessionTimeout((int)TimeUnit.HOURS.toSeconds(3));//session八小时过期
 		//设置jetty post form提交数据大小
 		if (container instanceof JettyEmbeddedServletContainerFactory) {
           JettyEmbeddedServletContainerFactory jettyEmbeddedServletContainerFactory=(JettyEmbeddedServletContainerFactory) container;
