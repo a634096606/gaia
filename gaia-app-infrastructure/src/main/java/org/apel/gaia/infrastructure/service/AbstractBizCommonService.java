@@ -20,9 +20,9 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
 @Component
-public class AbstractBizCommonService <T,PK extends Serializable> implements BizCommonService<T, PK>{
+public abstract class AbstractBizCommonService <T,PK extends Serializable> implements BizCommonService<T, PK>{
 
-	@Autowired(required = false)
+	@Autowired
 	protected CustomPageMapper<T> mapper;
 	
 	@Transactional
