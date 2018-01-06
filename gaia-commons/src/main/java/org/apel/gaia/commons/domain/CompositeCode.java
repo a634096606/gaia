@@ -37,17 +37,17 @@ public abstract class CompositeCode implements Serializable{
 
     @Getter
     @Setter
-    /** 结果码固定前缀 ，可以进行变更，通常固定码指代的是一个大的应用或者一个大的平台*/
+    /** 综合码固定前缀 ，可以进行变更，通常固定码指代的是一个大的应用或者一个大的平台*/
     protected String prefix           = "SYSM_M1_";
 
     @Setter
     @Getter
-    /** 结果码级别[第9位]，参见<code>ResultCodeLevel</code> */
+    /** 综合码级别[第9位]，参见<code>ResultCodeLevel</code> */
     protected String                codeLevel;
 
     @Setter
     @Getter
-    /** 结果码类型[第10位]，参见<code>ResultCodeType</code> */
+    /** 综合码类型[第10位]，参见<code>ResultCodeType</code> */
     protected String                codeType;
 
     @Setter
@@ -84,10 +84,10 @@ public abstract class CompositeCode implements Serializable{
      */
     public CompositeCode(CompositeCodeString codeString) {
 
-        //结果码长度检查
+        //综合码长度检查
         checkStringLength(codeString.toString(), 14);
 
-        //拆分结果码
+        //拆分综合码
         spliteResultCode(codeString.toString());
     }
 
@@ -249,7 +249,7 @@ public abstract class CompositeCode implements Serializable{
         checkStringLength(this.codeType, 1);
         checkStringLength(this.systemCode, 3);
 
-        //组装结果码字符串
+        //组装综合码字符串
         String resultCode = fetchResultCode();
 
         return resultCode;
@@ -283,9 +283,9 @@ public abstract class CompositeCode implements Serializable{
     // ~~~ 内部方法
 
     /**
-     * 解析和拆分结果码。
+     * 解析和拆分综合码。
      * 
-     * @param resultCode    结果码字符串
+     * @param resultCode    综合码字符串
      */
     private void spliteResultCode(String resultCode) {
         if (!resultCode.startsWith(prefix)) {
@@ -302,7 +302,7 @@ public abstract class CompositeCode implements Serializable{
     /**
      * 字符串长度检查。
      * 
-     * @param resultCode    结果码字符串
+     * @param resultCode    综合码字符串
      * @param length        长度
      */
     private void checkStringLength(String codeString, int length) {
