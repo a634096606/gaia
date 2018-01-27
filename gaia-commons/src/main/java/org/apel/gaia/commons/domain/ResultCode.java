@@ -11,7 +11,7 @@ package org.apel.gaia.commons.domain;
  * @author lijian
  * @version $Id: ResultCode.java, v 0.1 2018年1月6日 下午12:56:14 lijian Exp $
  */
-public abstract class ResultCode extends CompositeCode{
+public class ResultCode extends CompositeCode{
 
     private static final long serialVersionUID = 5778532410236447180L;
 
